@@ -2,176 +2,114 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Меню Fishy</title>
-  <script src="https://secure.wayforpay.com/server/pay-widget.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fishy Food</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
     body {
+      font-family: Arial, sans-serif;
       margin: 0;
-      padding: 20px;
-      font-family: 'Arial', sans-serif;
-      background: #111;
-      color: #fff;
+      padding: 0;
+      background: #f9f9f9;
     }
-    h1 {
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #222;
+      padding: 1rem;
+      color: white;
+    }
+    header img {
+      height: 50px;
+      border-radius: 50%;
+    }
+    .menu {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding: 1rem;
+      justify-content: center;
+    }
+    .dish {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 1rem;
+      width: 300px;
       text-align: center;
-      font-size: 2rem;
     }
-    .category {
-      margin-top: 40px;
+    .dish img {
+      max-width: 100%;
+      border-radius: 8px;
     }
-    .category h2 {
-      font-size: 1.5rem;
-      border-bottom: 2px solid #444;
-      padding-bottom: 10px;
+    .dish h3 {
+      margin-top: 0.5rem;
     }
-    .item-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 20px;
-    }
-    .item {
-      background: #222;
-      border-radius: 10px;
-      padding: 15px;
-      text-align: center;
-    }
-    .item h3 {
-      font-size: 1rem;
-      margin: 10px 0 5px;
-    }
-    .item .price {
-      font-weight: bold;
-      margin-bottom: 10px;
-      display: block;
-    }
-    .btn {
-      background: #0f0;
-      color: #000;
+    button {
+      margin-top: 0.5rem;
+      background: #ff6600;
       border: none;
-      padding: 8px 12px;
+      padding: 0.5rem 1rem;
+      color: white;
+      border-radius: 4px;
       cursor: pointer;
-      border-radius: 5px;
-      font-weight: bold;
     }
-    #cart p {
-      margin: 5px 0;
-    }
-    button:active {
-      transform: scale(0.98);
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+      }
+      .dish {
+        width: 90%;
+      }
     }
   </style>
 </head>
 <body>
 
-<h1>Меню Fishy</h1>
+<header>
+  <img src="assets/f7074dde-fd76-47d6-acdc-27227545d1e3.png" alt="Logo" />
+  <h1>Fishy Food</h1>
+</header>
 
-<div class="category">
-  <h2>Кошик</h2>
-  <div id="cart"></div>
-  <p><strong>Загальна сума:</strong> <span id="total">0</span> грн</p>
-  <button class="btn" onclick="checkout()">Оплатити все</button>
-</div>
-
-<div class="category">
-  <h2>Сніданки</h2>
-  <div class="item-grid">
-    <div class="item">
-      <h3>Сендвіч з лососем</h3>
-      <span class="price">165 грн</span>
-      <button class="btn" onclick="addToCart('Сендвіч з лососем', 165)">До кошика</button>
-    </div>
-    <div class="item">
-      <h3>Омлет з креветкою</h3>
-      <span class="price">175 грн</span>
-      <button class="btn" onclick="addToCart('Омлет з креветкою', 175)">До кошика</button>
-    </div>
-    <div class="item">
-      <h3>Цезар з лососем</h3>
-      <span class="price">315 грн</span>
-      <button class="btn" onclick="addToCart('Цезар з лососем', 315)">До кошика</button>
-    </div>
+<main class="menu">
+  <div class="dish">
+    <img src="assets/f7074dde-fd76-47d6-acdc-27227545d1e3.png" alt="Сендвіч з лососем" />
+    <h3>Сендвіч з лососем</h3>
+    <p>75 грн</p>
+    <button>Купити</button>
   </div>
-</div>
-
-<div class="category">
-  <h2>Морозиво</h2>
-  <div class="item-grid">
-    <div class="item">
-      <h3>Полуниця вершки</h3>
-      <span class="price">140 грн</span>
-      <button class="btn" onclick="addToCart('Полуниця вершки', 140)">До кошика</button>
-    </div>
-    <div class="item">
-      <h3>Солона карамель</h3>
-      <span class="price">140 грн</span>
-      <button class="btn" onclick="addToCart('Солона карамель', 140)">До кошика</button>
-    </div>
-    <div class="item">
-      <h3>Маракуйя-манго</h3>
-      <span class="price">155 грн</span>
-      <button class="btn" onclick="addToCart('Маракуйя-манго', 155)">До кошика</button>
-    </div>
+  <div class="dish">
+    <img src="assets/7b0be236-1f74-446a-a920-9a459d0be4cd.png" alt="Омлет з креветкою" />
+    <h3>Омлет з креветкою</h3>
+    <p>85 грн</p>
+    <button>Купити</button>
   </div>
-</div>
-
-<script>
-  const cart = [];
-
-  function addToCart(name, price) {
-    cart.push({ name, price });
-    updateCart();
-  }
-
-  function updateCart() {
-    const cartDiv = document.getElementById("cart");
-    cartDiv.innerHTML = "";
-    let total = 0;
-    cart.forEach((item, index) => {
-      total += item.price;
-      cartDiv.innerHTML += `<p>${item.name} — ${item.price} грн <button onclick="removeItem(${index})">✕</button></p>`;
-    });
-    document.getElementById("total").innerText = total;
-  }
-
-  function removeItem(index) {
-    cart.splice(index, 1);
-    updateCart();
-  }
-
-  function checkout() {
-    if (cart.length === 0) return alert("Кошик порожній");
-    const productNames = cart.map(item => item.name);
-    const productPrices = cart.map(item => item.price);
-    const productCounts = cart.map(() => "1");
-    const total = productPrices.reduce((a, b) => a + b, 0);
-
-    const wayforpay = new Wayforpay();
-    wayforpay.invoice({
-      merchantAccount: "github_com11",
-      merchantDomainName: "3d669b8c1436bbe5b80cd15a23cc9f9a",
-      authorizationType: "SimpleSignature",
-      merchantSignature: "a5eafca69452c315dd4ac2701b6bb97fc2e01b6d",
-      orderReference: "ORDER" + Math.floor(Math.random() * 100000),
-      orderDate: Math.floor(Date.now() / 1000),
-      amount: total,
-      currency: "UAH",
-      productName: productNames,
-      productCount: productCounts,
-      productPrice: productPrices,
-      clientFirstName: "Покупець",
-      clientLastName: "Fishy",
-      clientEmail: "email@example.com",
-      clientPhone: "380000000000",
-      language: "UA",
-      returnUrl: "https://3d669b8c1436bbe5b80cd15a23cc9f9a/thanks.html"
-    });
-  }
-</script>
+  <div class="dish">
+    <img src="assets/1794a50b-a868-462c-8ccd-c3d55a1160cf.png" alt="Цезар з лососем" />
+    <h3>Цезар з лососем</h3>
+    <p>90 грн</p>
+    <button>Купити</button>
+  </div>
+  <div class="dish">
+    <img src="assets/f714ce07-150d-4f16-8deb-1b8ae5fc473d.png" alt="Полуниця вершки" />
+    <h3>Полуниця вершки</h3>
+    <p>55 грн</p>
+    <button>Купити</button>
+  </div>
+  <div class="dish">
+    <img src="assets/77f782fb-0433-416e-a1eb-5ebfee00ce29.png" alt="Солона карамель" />
+    <h3>Солона карамель</h3>
+    <p>55 грн</p>
+    <button>Купити</button>
+  </div>
+  <div class="dish">
+    <img src="assets/113353da-4c6b-445e-a1b2-8dd7c4ea6ead.png" alt="Маракуйя-манго" />
+    <h3>Маракуйя-манго</h3>
+    <p>55 грн</p>
+    <button>Купити</button>
+  </div>
+</main>
 
 </body>
 </html>
