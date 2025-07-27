@@ -67,6 +67,18 @@
       text-align: center;
       margin-top: 40px;
     }
+    #cart-panel {
+      position: fixed;
+      top: 60px;
+      right: 20px;
+      width: 300px;
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 1rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      z-index: 1000;
+      display: none;
+    }
     @media (max-width: 600px) {
       header {
         flex-direction: column;
@@ -75,45 +87,6 @@
         width: 90%;
       }
     }
-
-    /* Cart styles */
-    #cart-panel {
-      position: fixed;
-      top: 0;
-      right: 0;
-      width: 300px;
-      height: 100%;
-      background: white;
-      box-shadow: -2px 0 10px rgba(0,0,0,0.3);
-      transform: translateX(100%);
-      transition: transform 0.3s ease;
-      padding: 20px;
-      z-index: 1000;
-      overflow-y: auto;
-    }
-    #cart-panel h3 {
-      margin-top: 0;
-    }
-    #cart-items {
-      list-style: none;
-      padding: 0;
-    }
-    #cart-items li {
-      margin-bottom: 10px;
-    }
-    .cart-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #ff6600;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-      z-index: 999;
-      cursor: pointer;
-    }
   </style>
 </head>
 <body>
@@ -121,6 +94,7 @@
 <header>
   <img src="logo.png" alt="Logo" />
   <h1>Fishy Food</h1>
+  <button onclick="toggleCart()">🛒</button>
 </header>
 
 <!-- Сніданки -->
@@ -130,13 +104,13 @@
     <img src="Сендвіч з лососем.png" alt="Сендвіч з лососем" />
     <h3>Сендвіч з лососем</h3>
     <p>165 грн</p>
-    <button onclick="addToCart('Сендвіч з лососем', 165)">Додати до кошика</button>
+    <button onclick="addToCart('Сендвіч з лососем', 165)">Купити</button>
   </div>
   <div class="dish">
     <img src="Омлет з креветкою.png" alt="Омлет з креветкою" />
     <h3>Омлет з креветкою</h3>
     <p>175 грн</p>
-    <button onclick="addToCart('Омлет з креветкою', 175)">Додати до кошика</button>
+    <button onclick="addToCart('Омлет з креветкою', 175)">Купити</button>
   </div>
 </main>
 
@@ -147,7 +121,7 @@
     <img src="Цезар з лососем.png" alt="Цезар з лососем" />
     <h3>Цезар з лососем</h3>
     <p>315 грн</p>
-    <button onclick="addToCart('Цезар з лососем', 315)">Додати до кошика</button>
+    <button onclick="addToCart('Цезар з лососем', 315)">Купити</button>
   </div>
 </main>
 
@@ -158,19 +132,19 @@
     <img src="Полуниця вершки.png" alt="Полуниця вершки" />
     <h3>Полуниця вершки</h3>
     <p>140 грн</p>
-    <button onclick="addToCart('Полуниця вершки', 140)">Додати до кошика</button>
+    <button onclick="addToCart('Полуниця вершки', 140)">Купити</button>
   </div>
   <div class="dish">
     <img src="Солона карамель.png" alt="Солона карамель" />
     <h3>Солона карамель</h3>
     <p>140 грн</p>
-    <button onclick="addToCart('Солона карамель', 140)">Додати до кошика</button>
+    <button onclick="addToCart('Солона карамель', 140)">Купити</button>
   </div>
   <div class="dish">
     <img src="Маракуйя-манго.png" alt="Маракуйя-манго" />
     <h3>Маракуйя-манго</h3>
     <p>155 грн</p>
-    <button onclick="addToCart('Маракуйя-манго', 155)">Додати до кошика</button>
+    <button onclick="addToCart('Маракуйя-манго', 155)">Купити</button>
   </div>
 </main>
 
@@ -179,11 +153,19 @@
   <h3>🛒 Кошик</h3>
   <ul id="cart-items"></ul>
   <p><strong>Сума: <span id="cart-total">0</span> грн</strong></p>
-  <button onclick="closeCart()">Закрити</button>
-</div>
-<button class="cart-btn" onclick="openCart()">🛒 Кошик</button>
 
-<!-- Instagram footer -->
+  <form id="order-form" action="https://formsubmit.co/alex08kuzya@gmail.com" method="POST">
+    <input type="hidden" name="_subject" value="Новий замовлення з сайту Fishy" />
+    <input type="hidden" name="_captcha" value="false">
+    <textarea id="order-message" name="message" rows="6" style="width: 100%;" placeholder="Деталі замовлення..." readonly></textarea>
+    <input type="email" name="email" placeholder="Ваш Email" required style="margin-top: 10px; width: 100%; padding: 5px;">
+    <button type="submit" style="margin-top: 10px; width: 100%;">Відправити замовлення</button>
+  </form>
+
+  <button onclick="closeCart()" style="margin-top: 10px;">Закрити</button>
+</div>
+
+<!-- Footer -->
 <footer>
   <a href="https://www.instagram.com/fishy.dnipro" target="_blank">
     <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg"
@@ -199,60 +181,64 @@
   </div>
   <div style="margin-top: 40px; text-align: center;">
     <iframe
-      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2649.2900624761755!2d35.0354197!3d48.4370999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40dbe2e4b35d637f%3A0xb6e07ef391af978e!2z0J_RgNC40YHQv9GD0YEg0J3QtdC90LXRgNC40Y8gMTEy0LA!5e0!3m2!1suk!2sua!4v1722098287050!5m2!1suk!2sua"
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2649.2900624761755!2d35.0354197!3d48.4370999"
       width="100%" height="300"
       style="border:0; border-radius: 10px;"
       allowfullscreen=""
-      loading="lazy"
-      referrerpolicy="no-referrer-when-downgrade">
+      loading="lazy">
     </iframe>
   </div>
 </footer>
 
 <script>
-  const cart = [];
+  let cart = [];
 
   function addToCart(name, price) {
-    const item = cart.find(i => i.name === name);
-    if (item) {
-      item.qty++;
+    const existing = cart.find(item => item.name === name);
+    if (existing) {
+      existing.qty += 1;
     } else {
       cart.push({ name, price, qty: 1 });
     }
     renderCart();
+    document.getElementById("cart-panel").style.display = "block";
   }
 
   function removeFromCart(name) {
-    const index = cart.findIndex(i => i.name === name);
-    if (index !== -1) {
-      cart.splice(index, 1);
-    }
+    cart = cart.filter(item => item.name !== name);
     renderCart();
   }
 
   function renderCart() {
     const cartItems = document.getElementById("cart-items");
     const total = document.getElementById("cart-total");
+    const orderMessage = document.getElementById("order-message");
+
     cartItems.innerHTML = "";
     let sum = 0;
+    let message = "";
 
     cart.forEach(item => {
       sum += item.price * item.qty;
       const li = document.createElement("li");
       li.innerHTML = `${item.name} × ${item.qty} — ${item.price * item.qty} грн 
-        <button onclick="removeFromCart('${item.name}')" style="margin-left: 10px;">🗑</button>`;
+        <button onclick="removeFromCart('${item.name}')">🗑</button>`;
       cartItems.appendChild(li);
+      message += `${item.name} × ${item.qty} — ${item.price * item.qty} грн\n`;
     });
 
     total.textContent = sum;
+    message += `\nЗагальна сума: ${sum} грн`;
+    if (orderMessage) orderMessage.value = message;
   }
 
-  function openCart() {
-    document.getElementById("cart-panel").style.transform = "translateX(0)";
+  function toggleCart() {
+    const panel = document.getElementById("cart-panel");
+    panel.style.display = panel.style.display === "none" ? "block" : "none";
   }
 
   function closeCart() {
-    document.getElementById("cart-panel").style.transform = "translateX(100%)";
+    document.getElementById("cart-panel").style.display = "none";
   }
 </script>
 
