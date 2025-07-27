@@ -179,18 +179,32 @@
     Проспект Науки 112А <br />
     Проєкт від <a href="https://www.instagram.com/seafood.dnepr" target="_blank" style="color: white; text-decoration: underline;">@seafood.dnepr</a>
   </div>
- <div style="margin-top: 40px; text-align: center;">
-  <iframe
-    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2649.2900624761755!2d35.0354197!3d48.4370999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40dbe2e4b35d637f%3A0xb6e07ef391af978e!2z0J_RgNC40YHQv9GD0YEg0J3QtdC90LXRgNC40Y8gMTEy0LA!5e0!3m2!1suk!2sua!4v1722098287050!5m2!1suk!2sua"
-    width="100%"
-    height="300"
-    style="border:0; border-radius: 10px;"
-    allowfullscreen=""
-    loading="lazy"
-    referrerpolicy="no-referrer-when-downgrade">
-  </iframe>
-</div>
+<!-- Подключаем Leaflet CSS и JS -->
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
 
+<!-- Карта -->
+<div id="map" style="width: 100%; height: 300px; margin-top: 20px; border-radius: 10px;"></div>
+
+<script>
+  const map = L.map('map').setView([48.4371, 35.0375], 16); // Координати просп. Науки, 112А
+
+  // Підключаємо тайли (картинку карти)
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap'
+  }).addTo(map);
+
+  // Додаємо маркер
+  L.marker([48.4371, 35.0375])
+    .addTo(map)
+    .bindPopup('📍 Fishy Food — просп. Науки, 112А')
+    .openPopup();
+</script>
 </footer>
 
 <script>
