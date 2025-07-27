@@ -38,6 +38,7 @@
       justify-content: center;
     }
     .dish {
+      position: relative; /* для toast */
       background: white;
       border-radius: 8px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -124,6 +125,25 @@
     #scrollTopBtn:hover {
       background-color: #e65c00;
     }
+    /* Toast уведомление */
+    .toast {
+      position: absolute;
+      background-color: #28a745;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 0.9rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+      z-index: 10000;
+      top: 10px;
+      right: 10px;
+    }
+    .toast.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
   </style>
 </head>
 <body>
@@ -141,13 +161,13 @@
     <img src="Сендвіч з лососем.png" alt="Сендвіч з лососем" />
     <h3>Сендвіч з лососем</h3>
     <p>165 грн</p>
-    <button onclick="addToCart('Сендвіч з лососем', 165)">Додати до кошика</button>
+    <button onclick="addToCart('Сендвіч з лососем', 165, event)">Додати до кошика</button>
   </div>
   <div class="dish">
     <img src="Омлет з креветкою.png" alt="Омлет з креветкою" />
     <h3>Омлет з креветкою</h3>
     <p>175 грн</p>
-    <button onclick="addToCart('Омлет з креветкою', 175)">Додати до кошика</button>
+    <button onclick="addToCart('Омлет з креветкою', 175, event)">Додати до кошика</button>
   </div>
 </main>
 
@@ -158,7 +178,7 @@
     <img src="Цезар з лососем.png" alt="Цезар з лососем" />
     <h3>Цезар з лососем</h3>
     <p>315 грн</p>
-    <button onclick="addToCart('Цезар з лососем', 315)">Додати до кошика</button>
+    <button onclick="addToCart('Цезар з лососем', 315, event)">Додати до кошика</button>
   </div>
 </main>
 
@@ -169,19 +189,19 @@
     <img src="Полуниця вершки.png" alt="Полуниця вершки" />
     <h3>Полуниця вершки</h3>
     <p>140 грн</p>
-    <button onclick="addToCart('Полуниця вершки', 140)">Додати до кошика</button>
+    <button onclick="addToCart('Полуниця вершки', 140, event)">Додати до кошика</button>
   </div>
   <div class="dish">
     <img src="Солона карамель.png" alt="Солона карамель" />
     <h3>Солона карамель</h3>
     <p>140 грн</p>
-    <button onclick="addToCart('Солона карамель', 140)">Додати до кошика</button>
+    <button onclick="addToCart('Солона карамель', 140, event)">Додати до кошика</button>
   </div>
   <div class="dish">
     <img src="Маракуйя-манго.png" alt="Маракуйя-манго" />
     <h3>Маракуйя-манго</h3>
     <p>155 грн</p>
-    <button onclick="addToCart('Маракуйя-манго', 155)">Додати до кошика</button>
+    <button onclick="addToCart('Маракуйя-манго', 155, event)">Додати до кошика</button>
   </div>
 </main>
 
@@ -244,7 +264,7 @@
 <script>
   let cart = [];
 
-  function addToCart(name, price) {
+  function addToCart(name, price, event) {
     const existing = cart.find(item => item.name === name);
     if (existing) {
       existing.qty += 1;
@@ -252,7 +272,23 @@
       cart.push({ name, price, qty: 1 });
     }
     renderCart();
-    // Убрано автоматическое открытие корзины
+
+    // Показываем уведомление "Додано 1 шт" рядом с кнопкой
+    const button = event.currentTarget;
+    let toast = button.parentElement.querySelector('.toast');
+
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.textContent = 'Додано 1 шт';
+      button.parentElement.appendChild(toast);
+    }
+
+    toast.classList.add('show');
+
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 1500);
   }
 
   function removeFromCart(name) {
