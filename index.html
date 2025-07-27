@@ -192,7 +192,7 @@
 <div id="map" style="width: 100%; height: 300px; margin-top: 20px; border-radius: 10px;"></div>
 
 <script>
-  const map = L.map('map').setView([48.4371, 35.0375], 16); // Координати просп. Науки, 112А
+  const map = L.map('map').setView([48.4268355, 35.0251479], 16); // Координати просп. Науки, 112Б
 
   // Підключаємо тайли (картинку карти)
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -202,7 +202,7 @@
   // Додаємо маркер
   L.marker([48.4371, 35.0375])
     .addTo(map)
-    .bindPopup('📍 Fishy Food — просп. Науки, 112А')
+    .bindPopup('📍 Fishy Food — просп. Науки, 112Б')
     .openPopup();
 </script>
 </footer>
