@@ -1,0 +1,61 @@
+<?php
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST');
+header('Access-Control-Allow-Headers: Content-Type');
+
+// Получаем JSON с фронтенда
+$input = json_decode(file_get_contents('php://input'), true);
+
+if (!$input) {
+    http_response_code(400);
+    echo json_encode(['error' => 'Неверный формат данных']);
+    exit;
+}
+
+$name = trim($input['name'] ?? '');
+$phone = trim($input['phone'] ?? '');
+$order = trim($input['order'] ?? '');
+
+if (!$name || !$phone) {
+    http_response_code(400);
+    echo json_encode(['error' => 'Имя и телефон обязательны']);
+    exit;
+}
+
+// Здесь вставь свои токен и чат ID из Telegram
+$botToken = "AAFsbCWo05kpaa0rfY5S0KTFv3oM8bs2H3Q";
+$chat_id = "8469161957";
+
+$message = "Нове замовлення з сайту Fishy Food:\n";
+$message .= "Ім'я: $name\n";
+$message .= "Телефон: $phone\n";
+$message .= "Замовлення:\n$order";
+
+$url = "https://api.telegram.org/bot$botToken/sendMessage";
+
+$data = [
+    'chat_id' => $chat_id,
+    'text' => $message,
+];
+
+$options = [
+    'http' => [
+        'method' => 'POST',
+        'header' => "Content-Type:application/x-www-form-urlencoded\r\n",
+        'content' => http_build_query($data),
+        'timeout' => 10,
+    ],
+];
+
+$context = stream_context_create($options);
+$result = file_get_contents($url, false, $context);
+
+if ($result === FALSE) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Не удалось отправить сообщение']);
+    exit;
+}
+
+echo json_encode(['success' => true]);
+?>
