@@ -103,6 +103,27 @@
       border-radius: 10px;
       overflow: hidden;
     }
+    /* Кнопка "вверх" */
+    #scrollTopBtn {
+      display: none;
+      position: fixed;
+      bottom: 40px;
+      right: 30px;
+      z-index: 1100;
+      border: none;
+      outline: none;
+      background-color: #ff6600;
+      color: white;
+      cursor: pointer;
+      padding: 10px 15px;
+      border-radius: 50%;
+      font-size: 18px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      transition: background-color 0.3s;
+    }
+    #scrollTopBtn:hover {
+      background-color: #e65c00;
+    }
   </style>
 </head>
 <body>
@@ -120,13 +141,13 @@
     <img src="Сендвіч з лососем.png" alt="Сендвіч з лососем" />
     <h3>Сендвіч з лососем</h3>
     <p>165 грн</p>
-    <button onclick="addToCart('Сендвіч з лососем', 165)">Купити</button>
+    <button onclick="addToCart('Сендвіч з лососем', 165)">Додати до кошика</button>
   </div>
   <div class="dish">
     <img src="Омлет з креветкою.png" alt="Омлет з креветкою" />
     <h3>Омлет з креветкою</h3>
     <p>175 грн</p>
-    <button onclick="addToCart('Омлет з креветкою', 175)">Купити</button>
+    <button onclick="addToCart('Омлет з креветкою', 175)">Додати до кошика</button>
   </div>
 </main>
 
@@ -137,7 +158,7 @@
     <img src="Цезар з лососем.png" alt="Цезар з лососем" />
     <h3>Цезар з лососем</h3>
     <p>315 грн</p>
-    <button onclick="addToCart('Цезар з лососем', 315)">Купити</button>
+    <button onclick="addToCart('Цезар з лососем', 315)">Додати до кошика</button>
   </div>
 </main>
 
@@ -148,19 +169,19 @@
     <img src="Полуниця вершки.png" alt="Полуниця вершки" />
     <h3>Полуниця вершки</h3>
     <p>140 грн</p>
-    <button onclick="addToCart('Полуниця вершки', 140)">Купити</button>
+    <button onclick="addToCart('Полуниця вершки', 140)">Додати до кошика</button>
   </div>
   <div class="dish">
     <img src="Солона карамель.png" alt="Солона карамель" />
     <h3>Солона карамель</h3>
     <p>140 грн</p>
-    <button onclick="addToCart('Солона карамель', 140)">Купити</button>
+    <button onclick="addToCart('Солона карамель', 140)">Додати до кошика</button>
   </div>
   <div class="dish">
     <img src="Маракуйя-манго.png" alt="Маракуйя-манго" />
     <h3>Маракуйя-манго</h3>
     <p>155 грн</p>
-    <button onclick="addToCart('Маракуйя-манго', 155)">Купити</button>
+    <button onclick="addToCart('Маракуйя-манго', 155)">Додати до кошика</button>
   </div>
 </main>
 
@@ -199,7 +220,7 @@
   <div style="margin-top: 10px; font-size: 14px; line-height: 1.5;">
     [пн - нд 9:00 - 20:00] <br />
     📍ЖК Рибінський | 📞 <a href="tel:+380963318856" style="color: white; text-decoration: underline;">+380963318856</a> <br />
-    Проспект Науки 112Б <br />
+    Проспект Науки 112А <br />
     Проєкт від <a href="https://www.instagram.com/seafood.dnepr" target="_blank" style="color: white; text-decoration: underline;">@seafood.dnepr</a>
   </div>
 </footer>
@@ -217,6 +238,9 @@
   ></iframe>
 </div>
 
+<!-- Кнопка вверх -->
+<button id="scrollTopBtn" title="Вверх" onclick="scrollToTop()">↑</button>
+
 <script>
   let cart = [];
 
@@ -228,7 +252,7 @@
       cart.push({ name, price, qty: 1 });
     }
     renderCart();
-    document.getElementById("cart-panel").style.display = "block";
+    // Убрано автоматическое открытие корзины
   }
 
   function removeFromCart(name) {
@@ -342,6 +366,20 @@ ${message}
       console.error(err);
       alert("Помилка мережі.");
     });
+  }
+
+  // Кнопка "вверх" — показать при прокрутке вниз на 200px
+  const scrollTopBtn = document.getElementById("scrollTopBtn");
+  window.onscroll = function() {
+    if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+      scrollTopBtn.style.display = "block";
+    } else {
+      scrollTopBtn.style.display = "none";
+    }
+  };
+
+  function scrollToTop() {
+    window.scrollTo({top: 0, behavior: 'smooth'});
   }
 </script>
 
