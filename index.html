@@ -267,6 +267,9 @@
   const TELEGRAM_TOKEN = "8469161957:AAFsbCWo05kpaa0rfY5S0KTFv3oM8bs2H3Q";
   const CHAT_ID = "819184879";
 
+  // Получаем номер заказа из localStorage или начинаем с 1
+  let orderNumber = parseInt(localStorage.getItem('orderNumber')) || 1;
+
   function submitOrder() {
     const name = document.getElementById("user-name").value.trim();
     const phone = document.getElementById("user-phone").value.trim();
@@ -279,7 +282,7 @@
     }
 
     const fullMessage = `
-🛒 НОВЕ ЗАМОВЛЕННЯ:
+🛒 ЗАМОВЛЕННЯ №${orderNumber}:
 ------------------------
 👤 Імʼя: ${name}
 📞 Телефон: ${phone}
@@ -300,11 +303,12 @@ ${message}
     })
     .then(res => {
       if (res.ok) {
-        alert("Замовлення надіслано!");
+        alert(`Замовлення №${orderNumber} надіслано!`);
+        orderNumber++;
+        localStorage.setItem('orderNumber', orderNumber); // сохраняем номер заказа
         cart = [];
         renderCart();
         closeCart();
-        // Очистить поля ввода
         document.getElementById("user-name").value = "";
         document.getElementById("user-phone").value = "";
         document.getElementById("user-address").value = "";
