@@ -303,7 +303,7 @@ ${message}
     })
     .then(res => {
       if (res.ok) {
-        alert(`Замовлення №${orderNumber} надіслано!`);
+        alert(`Дякую за замовлення №${orderNumber}!`);
         orderNumber++;
         localStorage.setItem('orderNumber', orderNumber); // сохраняем номер заказа
         cart = [];
