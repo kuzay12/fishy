@@ -97,6 +97,11 @@
       box-sizing: border-box;
     }
   </style>
+  <!-- Подключаем Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
 </head>
 <body>
 
@@ -195,31 +200,12 @@
     Проспект Науки 112А <br />
     Проєкт від <a href="https://www.instagram.com/seafood.dnepr" target="_blank" style="color: white; text-decoration: underline;">@seafood.dnepr</a>
   </div>
-  <!-- Подключаем Leaflet CSS и JS -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
-  </script>
-
-  <!-- Карта -->
-  <div id="map" style="width: 100%; height: 300px; margin-top: 20px; border-radius: 10px;"></div>
-
-  <script>
-    const map = L.map('map').setView([48.4268355, 35.0251479], 16);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap'
-    }).addTo(map);
-
-    L.marker([48.4371, 35.0375])
-      .addTo(map)
-      .bindPopup('📍 Fishy Food — просп. Науки, 112Б')
-      .openPopup();
-  </script>
 </footer>
+
+<!-- Подключаем Leaflet JS -->
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
 
 <script>
   let cart = [];
@@ -348,7 +334,23 @@ ${message}
       alert("Помилка мережі.");
     });
   }
+
+  // Инициализация карты с нужным центром и маркером
+  const map = L.map('map').setView([48.4268355, 35.0251479], 16);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap'
+  }).addTo(map);
+
+  L.marker([48.4268355, 35.0251479])
+    .addTo(map)
+    .bindPopup('📍 Fishy Food — просп. Науки, 112Б')
+    .openPopup();
+
 </script>
+
+<!-- Карта -->
+<div id="map" style="width: 100%; height: 300px; margin-top: 20px; border-radius: 10px;"></div>
 
 </body>
 </html>
