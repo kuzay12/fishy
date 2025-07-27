@@ -167,7 +167,15 @@
 
   <input type="text" id="user-name" placeholder="Ваше імʼя" required style="margin-top: 10px; width: 100%; padding: 5px;">
   <input type="tel" id="user-phone" placeholder="Телефон" required style="margin-top: 10px; width: 100%; padding: 5px;">
-  <input type="text" id="user-address" placeholder="Адреса доставки" required style="margin-top: 10px; width: 100%; padding: 5px;">
+
+  <label style="margin-top: 10px; display: block;">
+    <input type="radio" name="delivery-type" value="delivery" onchange="toggleAddress(true)"> Доставка
+  </label>
+  <label>
+    <input type="radio" name="delivery-type" value="pickup" onchange="toggleAddress(false)" checked> Самовивіз
+  </label>
+
+  <input type="text" id="user-address" placeholder="Адреса доставки (доставка за тарифами такси)" style="margin-top: 10px; width: 100%; padding: 5px; display: none;" >
 
   <button onclick="submitOrder()" style="margin-top: 10px; width: 100%;">Відправити замовлення</button>
   <button onclick="closeCart()" style="margin-top: 10px;">Закрити</button>
@@ -270,14 +278,32 @@
   // Получаем номер заказа из localStorage или начинаем с 1
   let orderNumber = parseInt(localStorage.getItem('orderNumber')) || 1;
 
+  function toggleAddress(show) {
+    const addrInput = document.getElementById('user-address');
+    if (show) {
+      addrInput.style.display = 'block';
+      addrInput.required = true;
+    } else {
+      addrInput.style.display = 'none';
+      addrInput.required = false;
+      addrInput.value = '';
+    }
+  }
+
   function submitOrder() {
     const name = document.getElementById("user-name").value.trim();
     const phone = document.getElementById("user-phone").value.trim();
+    const deliveryType = document.querySelector('input[name="delivery-type"]:checked').value;
     const address = document.getElementById("user-address").value.trim();
     const message = document.getElementById("order-message").value;
 
-    if (!name || !phone || !address) {
-      alert("Будь ласка, заповніть всі поля!");
+    if (!name || !phone) {
+      alert("Будь ласка, заповніть ім'я і телефон!");
+      return;
+    }
+
+    if (deliveryType === 'delivery' && !address) {
+      alert("Будь ласка, введіть адресу доставки!");
       return;
     }
 
@@ -286,7 +312,7 @@
 ------------------------
 👤 Імʼя: ${name}
 📞 Телефон: ${phone}
-🏠 Адреса: ${address}
+${deliveryType === 'delivery' ? `🏠 Адреса: ${address}` : "🏠 Самовивіз"}
 ------------------------
 ${message}
     `;
@@ -305,13 +331,14 @@ ${message}
       if (res.ok) {
         alert(`Дякую за замовлення №${orderNumber}!`);
         orderNumber++;
-        localStorage.setItem('orderNumber', orderNumber); // сохраняем номер заказа
+        localStorage.setItem('orderNumber', orderNumber);
         cart = [];
         renderCart();
         closeCart();
         document.getElementById("user-name").value = "";
         document.getElementById("user-phone").value = "";
         document.getElementById("user-address").value = "";
+        toggleAddress(false);
       } else {
         alert("Помилка при надсиланні. Спробуйте ще раз.");
       }
