@@ -172,25 +172,25 @@
     <img src="Сендвіч з лососем.png" alt="Сендвіч з лососем" />
     <h3>Сендвіч з лососем</h3>
     <p>165 грн</p>
-    <button onclick="addToCart('Сендвіч з лососем', 165, this)">Додати до кошика</button>
+    <button data-name="Сендвіч з лососем" onclick="addToCart('Сендвіч з лососем', 165, this)">Додати до кошика</button>
   </div>
   <div class="dish">
     <img src="Сендвіч лосось авокадо.png" alt="Сендвіч лосось авокадо" />
     <h3>Сендвіч лосось авокадо</h3>
     <p>185 грн</p>
-    <button onclick="addToCart('Сендвіч лосось авокадо', 185, this)">Додати до кошика</button>
+    <button data-name="Сендвіч лосось авокадо" onclick="addToCart('Сендвіч лосось авокадо', 185, this)">Додати до кошика</button>
   </div>
   <div class="dish">
     <img src="Омлет з креветкою.png" alt="Омлет з креветкою" />
     <h3>Омлет з креветкою</h3>
     <p>175 грн</p>
-    <button onclick="addToCart('Омлет з креветкою', 175, this)">Додати до кошика</button>
+    <button data-name="Омлет з креветкою" onclick="addToCart('Омлет з креветкою', 175, this)">Додати до кошика</button>
   </div>
   <div class="dish">
     <img src="Вівсянка з креветкою та страчетелою.png" alt="Вівсянка з креветкою та страчетелою" />
     <h3>Вівсянка з креветкою та страчетелою</h3>
     <p>295 грн</p>
-    <button onclick="addToCart('Вівсянка з креветкою та страчетелою', 295, this)">Додати до кошика</button>
+    <button data-name="Вівсянка з креветкою та страчетелою" onclick="addToCart('Вівсянка з креветкою та страчетелою', 295, this)">Додати до кошика</button>
   </div>
 </main>
 
@@ -200,7 +200,7 @@
     <img src="Цезар з лососем.png" alt="Цезар з лососем" />
     <h3>Цезар з лососем</h3>
     <p>315 грн</p>
-    <button onclick="addToCart('Цезар з лососем', 315, this)">Додати до кошика</button>
+    <button data-name="Цезар з лососем" onclick="addToCart('Цезар з лососем', 315, this)">Додати до кошика</button>
   </div>
 </main>
 
@@ -210,72 +210,45 @@
     <img src="Полуниця вершки.png" alt="Полуниця вершки" />
     <h3>Полуниця вершки</h3>
     <p>140 грн</p>
-    <button onclick="addToCart('Полуниця вершки', 140, this)">Додати до кошика</button>
+    <button data-name="Полуниця вершки" onclick="addToCart('Полуниця вершки', 140, this)">Додати до кошика</button>
   </div>
   <div class="dish">
     <img src="Солона карамель.png" alt="Солона карамель" />
     <h3>Солона карамель</h3>
     <p>140 грн</p>
-    <button onclick="addToCart('Солона карамель', 140, this)">Додати до кошика</button>
+    <button data-name="Солона карамель" onclick="addToCart('Солона карамель', 140, this)">Додати до кошика</button>
   </div>
   <div class="dish">
     <img src="Маракуйя-манго.png" alt="Маракуйя-манго" />
     <h3>Маракуйя-манго</h3>
     <p>155 грн</p>
-    <button onclick="addToCart('Маракуйя-манго', 155, this)">Додати до кошика</button>
+    <button data-name="Маракуйя-манго" onclick="addToCart('Маракуйя-манго', 155, this)">Додати до кошика</button>
   </div>
 </main>
 
 <div id="cart-panel">
   <h3>🛒 Кошик</h3>
   <ul id="cart-items"></ul>
-  <p><strong>Сума: <span id="cart-total">0</span> грн</strong></p>
-
-  <textarea id="order-message" rows="6" style="width: 100%;" readonly></textarea>
-
-  <input type="text" id="user-name" placeholder="Ваше імʼя" required style="margin-top: 10px; width: 100%; padding: 5px;">
-  <input type="tel" id="user-phone" placeholder="Телефон" required style="margin-top: 10px; width: 100%; padding: 5px;">
-
-  <label style="margin-top: 10px; display: block;">
-    <input type="radio" name="delivery-type" value="delivery" onchange="toggleAddress(true)"> Доставка
-  </label>
-  <label>
-    <input type="radio" name="delivery-type" value="pickup" onchange="toggleAddress(false)" checked> Самовивіз
-  </label>
-
-  <input type="text" id="user-address" placeholder="Адреса доставки (доставка за тарифами такси)" style="margin-top: 10px; width: 100%; padding: 5px; display: none;" >
-
-  <button onclick="submitOrder()" style="margin-top: 10px; width: 100%;">Відправити замовлення</button>
-  <button onclick="closeCart()" style="margin-top: 10px;">Закрити</button>
+  <p>Всього: <span id="cart-total">0</span> грн</p>
+  <textarea id="order-message" rows="6" style="width: 100%; resize: none;"></textarea>
 </div>
 
 <footer>
-  <a href="https://www.instagram.com/fishy.dnipro" target="_blank">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg"
-         alt="Instagram"
-         width="40"
-         height="40" />
-  </a>
-  <div style="margin-top: 10px; font-size: 14px; line-height: 1.5;">
-    [пн - нд 9:00 - 20:00] <br />
-    📍ЖК Рибінський | 📞 <a href="tel:+380963318856" style="color: white; text-decoration: underline;">+380963318856</a> <br />
-    Проспект Науки 112А <br />
-    Про нас: fishyfood.store
-  </div>
-  <div class="map-container">
-    <iframe
-      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2575.907494129461!2d35.00386631587337!3d48.46596377925014!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40dbe2e6c8d2fdbb%3A0x191296b6aa0806c!2z0JLQsNC90L7Qv9C-0YDQvtC70YzRgtCw0LnQvtC90LDRjyDQvdC40YHRjNC60LAgMTExLCDQodCw0YHRgtGMLCAxMDk!5e0!3m2!1suk!2sua!4v1683307011640!5m2!1suk!2sua"
-      width="100%"
-      height="100%"
-      style="border:0;"
-      allowfullscreen=""
-      loading="lazy"
-      referrerpolicy="no-referrer-when-downgrade"
-    ></iframe>
-  </div>
+  <p>Автор: Денис</p>
 </footer>
 
-<button onclick="scrollToTop()" id="scrollTopBtn" title="Вгору">⬆️</button>
+<button id="scrollTopBtn" onclick="scrollToTop()">▲</button>
+
+<div class="map-container">
+  <iframe
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2524.1832736480067!2d30.5034000157035!3d50.46052277947833!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40d4ce427e4eec4b%3A0x8451a34d6e30f1b6!2z0YPQuy4g0JrQvtGA0LXQvdC40LrQvtC_0YDRg9C60LjQuSDQvNC-0YLQvtC70Lgg0JPRgNC-0YHQutCw0Y8sIDEwNiwg0JDQvtGB0YLQvtCy0LAsINCg0LXRgdC60LDRjywg0J_QvtGA0L7QtNC90LXRgdC60LjQuSDQvdC-0YDQtdGC0LDRjywg0JLQvtC70YzQvdCw0Y8g0L7QstGB0LrQvtCy0LAsIDI4MTUzNA!5e0!3m2!1sru!2sua!4v1690546193179!5m2!1sru!2sua"
+    width="100%"
+    height="300"
+    style="border: 0"
+    allowfullscreen=""
+    loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade"></iframe>
+</div>
 
 <script>
   const cart = [];
@@ -288,16 +261,30 @@
       cart.push({ name, price, count: 1 });
     }
     updateCartUI();
+    updateButtonsText();
+  }
+
+  function updateButtonsText() {
+    const buttons = document.querySelectorAll('button[data-name]');
+    buttons.forEach(btn => {
+      const name = btn.getAttribute('data-name');
+      const item = cart.find(i => i.name === name);
+      if (item) {
+        btn.textContent = `Додано (${item.count})`;
+      } else {
+        btn.textContent = 'Додати до кошика';
+      }
+    });
   }
 
   function updateCartUI() {
-    const cartPanel = document.getElementById('cart-panel');
     const cartItems = document.getElementById('cart-items');
     const cartTotal = document.getElementById('cart-total');
     const orderMessage = document.getElementById('order-message');
 
     cartItems.innerHTML = '';
     let total = 0;
+
     cart.forEach(item => {
       const li = document.createElement('li');
       li.textContent = `${item.name} x${item.count} — ${item.price * item.count} грн`;
@@ -311,6 +298,7 @@
           if (idx > -1) cart.splice(idx, 1);
         }
         updateCartUI();
+        updateButtonsText();
       };
       li.appendChild(btnRemove);
 
@@ -319,12 +307,15 @@
       btnAdd.onclick = () => {
         item.count++;
         updateCartUI();
+        updateButtonsText();
       };
       li.appendChild(btnAdd);
 
       cartItems.appendChild(li);
+
       total += item.price * item.count;
     });
+
     cartTotal.textContent = total;
 
     let msg = "Замовлення:\n";
@@ -337,73 +328,23 @@
   }
 
   function toggleCart() {
-    const cartPanel = document.getElementById('cart-panel');
-    if (cartPanel.style.display === 'none' || cartPanel.style.display === '') {
-      cartPanel.style.display = 'block';
-      updateCartUI();
+    const panel = document.getElementById('cart-panel');
+    if (panel.style.display === 'block') {
+      panel.style.display = 'none';
     } else {
-      cartPanel.style.display = 'none';
+      panel.style.display = 'block';
     }
   }
 
-  function closeCart() {
-    document.getElementById('cart-panel').style.display = 'none';
-  }
-
-  function toggleAddress(show) {
-    const addrInput = document.getElementById('user-address');
-    addrInput.style.display = show ? 'block' : 'none';
-  }
-
-  function submitOrder() {
-    const userName = document.getElementById('user-name').value.trim();
-    const userPhone = document.getElementById('user-phone').value.trim();
-    const deliveryType = document.querySelector('input[name="delivery-type"]:checked').value;
-    const userAddress = document.getElementById('user-address').value.trim();
-    const orderMessage = document.getElementById('order-message').value;
-
-    if (!userName || !userPhone) {
-      alert('Будь ласка, введіть імʼя та телефон.');
-      return;
-    }
-    if (deliveryType === 'delivery' && !userAddress) {
-      alert('Будь ласка, введіть адресу доставки.');
-      return;
-    }
-    if (cart.length === 0) {
-      alert('Ваш кошик порожній!');
-      return;
-    }
-
-    let finalMessage = orderMessage + '\n';
-    finalMessage += `Імʼя: ${userName}\nТелефон: ${userPhone}\n`;
-    finalMessage += `Тип: ${deliveryType === 'delivery' ? 'Доставка' : 'Самовивіз'}\n`;
-    if (deliveryType === 'delivery') {
-      finalMessage += `Адреса: ${userAddress}\n`;
-    }
-
-    // Здесь можно сделать отправку через API, форму, или WhatsApp-ссылку
-    alert('Замовлення надіслано! Деталі:\n' + finalMessage);
-
-    cart.length = 0; // Очистить корзину
-    updateCartUI();
-    closeCart();
-
-    document.getElementById('user-name').value = '';
-    document.getElementById('user-phone').value = '';
-    document.getElementById('user-address').value = '';
-    document.getElementById('order-message').value = '';
-  }
-
-  window.onscroll = function() {scrollFunction()};
-  const scrollBtn = document.getElementById("scrollTopBtn");
-  function scrollFunction() {
-    if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-      scrollBtn.style.display = "block";
+  // Кнопка "вверх"
+  const scrollTopBtn = document.getElementById('scrollTopBtn');
+  window.onscroll = () => {
+    if (document.documentElement.scrollTop > 300) {
+      scrollTopBtn.style.display = 'block';
     } else {
-      scrollBtn.style.display = "none";
+      scrollTopBtn.style.display = 'none';
     }
-  }
+  };
   function scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
