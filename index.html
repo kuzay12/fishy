@@ -226,38 +226,6 @@
   </div>
 </main>
 
-<h2 id="salads" class="section-title">Салати</h2>
-<main class="menu">
-  <div class="dish">
-    <img src="Цезар з лососем.png" alt="Цезар з лососем" />
-    <h3>Цезар з лососем</h3>
-    <p>315 грн</p>
-    <button onclick="addToCart('Цезар з лососем', 315, event)">Додати до кошика</button>
-  </div>
-</main>
-
-<h2 id="icecream" class="section-title">Морозиво</h2>
-<main class="menu">
-  <div class="dish">
-    <img src="Полуниця вершки.png" alt="Полуниця вершки" />
-    <h3>Полуниця вершки</h3>
-    <p>140 грн</p>
-    <button onclick="addToCart('Полуниця вершки', 140, event)">Додати до кошика</button>
-  </div>
-  <div class="dish">
-    <img src="Солона карамель.png" alt="Солона карамель" />
-    <h3>Солона карамель</h3>
-    <p>140 грн</p>
-    <button onclick="addToCart('Солона карамель', 140, event)">Додати до кошика</button>
-  </div>
-  <div class="dish">
-    <img src="Маракуйя-манго.png" alt="Маракуйя-манго" />
-    <h3>Маракуйя-манго</h3>
-    <p>155 грн</p>
-    <button onclick="addToCart('Маракуйя-манго', 155, event)">Додати до кошика</button>
-  </div>
-</main>
-
 <div id="cart-panel">
   <h3>🛒 Кошик</h3>
   <ul id="cart-items"></ul>
@@ -292,196 +260,152 @@
     [пн - нд 9:00 - 20:00] <br />
     📍ЖК Рибінський | 📞 <a href="tel:+380963318856" style="color: white; text-decoration: underline;">+380963318856</a> <br />
     Проспект Науки 112А <br />
-    Проєкт від <a href="https://www.instagram.com/seafood.dnepr" target="_blank" style="color: white; text-decoration: underline;">@seafood.dnepr</a>
+    Про нас: fishyfood.store
+  </div>
+  <div class="map-container">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2575.907494129461!2d35.00386631587337!3d48.46596377925014!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40dbe2e6c8d2fdbb%3A0x191296b6aa0806c!2z0JLQsNC90L7Qv9C-0YDQvtC70YzRgtCw0LnQvtC90LDRjyDQvdC40YHRjNC60LAgMTExLCDQodCw0YHRgtGMLCAxMDk!5e0!3m2!1suk!2sua!4v1683307011640!5m2!1suk!2sua"
+      width="100%"
+      height="100%"
+      style="border:0;"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+    ></iframe>
   </div>
 </footer>
 
-<div class="map-container">
-  <iframe
-    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2608.487329134857!2d35.02295881566573!3d48.42683547924373!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40dbe94f9b4e9c3f%3A0x99c5d46e560262cf!2z0JrQsNGA0LDRgtC40Lkg0J_QsNC70LDRgNC-0LLQsNGP!5e0!3m2!1suk!2sua!4v1690475165441!5m2!1suk!2sua"
-    width="100%"
-    height="300"
-    style="border:0;"
-    allowfullscreen=""
-    loading="lazy"
-    referrerpolicy="no-referrer-when-downgrade"
-  ></iframe>
-</div>
-
-<button id="scrollTopBtn" title="Вверх" onclick="scrollToTop()">↑</button>
+<button onclick="scrollToTop()" id="scrollTopBtn" title="Вгору">⬆️</button>
 
 <script>
-  let cart = [];
+  const cart = [];
 
-  function addToCart(name, price, event) {
+  function addToCart(name, price, btn) {
     const existing = cart.find(item => item.name === name);
     if (existing) {
-      existing.qty += 1;
+      existing.count++;
     } else {
-      cart.push({ name, price, qty: 1 });
+      cart.push({ name, price, count: 1 });
     }
-    renderCart();
-    updateButtonText(name);
+    updateCartUI();
   }
 
-  function changeQty(name, delta) {
-    const item = cart.find(i => i.name === name);
-    if (!item) return;
-    item.qty += delta;
-    if (item.qty <= 0) {
-      cart = cart.filter(i => i.name !== name);
-    }
-    renderCart();
-    updateButtonText(name);
-  }
+  function updateCartUI() {
+    const cartPanel = document.getElementById('cart-panel');
+    const cartItems = document.getElementById('cart-items');
+    const cartTotal = document.getElementById('cart-total');
+    const orderMessage = document.getElementById('order-message');
 
-  function updateButtonText(name) {
-    const buttons = document.querySelectorAll('button');
-    buttons.forEach(btn => {
-      const parent = btn.parentElement;
-      const title = parent.querySelector('h3');
-      if (title && title.textContent === name) {
-        const item = cart.find(i => i.name === name);
-        if (item) {
-          btn.textContent = `Додати до кошика (${item.qty} шт)`;
-        } else {
-          btn.textContent = "Додати до кошика";
-        }
-      }
-    });
-  }
-
-  function renderCart() {
-    const cartItems = document.getElementById("cart-items");
-    const total = document.getElementById("cart-total");
-    const orderMessage = document.getElementById("order-message");
-
-    cartItems.innerHTML = "";
-    let sum = 0;
-    let message = "";
-
+    cartItems.innerHTML = '';
+    let total = 0;
     cart.forEach(item => {
-      sum += item.price * item.qty;
-      const li = document.createElement("li");
-      li.innerHTML = `
-        ${item.name} × ${item.qty} — ${item.price * item.qty} грн
-        <button onclick="changeQty('${item.name}', -1)">−</button>
-        <button onclick="changeQty('${item.name}', 1)">+</button>
-      `;
-      cartItems.appendChild(li);
-      message += `${item.name} × ${item.qty} — ${item.price * item.qty} грн\n`;
-    });
+      const li = document.createElement('li');
+      li.textContent = `${item.name} x${item.count} — ${item.price * item.count} грн`;
 
-    total.textContent = sum;
-    message += `\nЗагальна сума: ${sum} грн`;
-    if (orderMessage) orderMessage.value = message;
+      const btnRemove = document.createElement('button');
+      btnRemove.textContent = '-';
+      btnRemove.onclick = () => {
+        item.count--;
+        if (item.count === 0) {
+          const idx = cart.indexOf(item);
+          if (idx > -1) cart.splice(idx, 1);
+        }
+        updateCartUI();
+      };
+      li.appendChild(btnRemove);
+
+      const btnAdd = document.createElement('button');
+      btnAdd.textContent = '+';
+      btnAdd.onclick = () => {
+        item.count++;
+        updateCartUI();
+      };
+      li.appendChild(btnAdd);
+
+      cartItems.appendChild(li);
+      total += item.price * item.count;
+    });
+    cartTotal.textContent = total;
+
+    let msg = "Замовлення:\n";
+    cart.forEach(item => {
+      msg += `${item.name} x${item.count} — ${item.price * item.count} грн\n`;
+    });
+    msg += `\nСума: ${total} грн\n`;
+
+    orderMessage.value = msg;
   }
 
   function toggleCart() {
-    const panel = document.getElementById("cart-panel");
-    panel.style.display = panel.style.display === "none" ? "block" : "none";
+    const cartPanel = document.getElementById('cart-panel');
+    if (cartPanel.style.display === 'none' || cartPanel.style.display === '') {
+      cartPanel.style.display = 'block';
+      updateCartUI();
+    } else {
+      cartPanel.style.display = 'none';
+    }
   }
 
   function closeCart() {
-    document.getElementById("cart-panel").style.display = "none";
+    document.getElementById('cart-panel').style.display = 'none';
   }
-
-  const TELEGRAM_TOKEN = "8469161957:AAFsbCWo05kpaa0rfY5S0KTFv3oM8bs2H3Q";
-  const CHAT_ID = "819184879";
-
-  let orderNumber = parseInt(localStorage.getItem('orderNumber')) || 1;
 
   function toggleAddress(show) {
     const addrInput = document.getElementById('user-address');
-    if (show) {
-      addrInput.style.display = 'block';
-      addrInput.required = true;
-    } else {
-      addrInput.style.display = 'none';
-      addrInput.required = false;
-      addrInput.value = '';
-    }
+    addrInput.style.display = show ? 'block' : 'none';
   }
 
   function submitOrder() {
-    const name = document.getElementById("user-name").value.trim();
-    const phone = document.getElementById("user-phone").value.trim();
+    const userName = document.getElementById('user-name').value.trim();
+    const userPhone = document.getElementById('user-phone').value.trim();
     const deliveryType = document.querySelector('input[name="delivery-type"]:checked').value;
-    const address = document.getElementById("user-address").value.trim();
-    const message = document.getElementById("order-message").value;
+    const userAddress = document.getElementById('user-address').value.trim();
+    const orderMessage = document.getElementById('order-message').value;
 
-    if (!name || !phone) {
-      alert("Будь ласка, заповніть ім'я і телефон!");
+    if (!userName || !userPhone) {
+      alert('Будь ласка, введіть імʼя та телефон.');
+      return;
+    }
+    if (deliveryType === 'delivery' && !userAddress) {
+      alert('Будь ласка, введіть адресу доставки.');
+      return;
+    }
+    if (cart.length === 0) {
+      alert('Ваш кошик порожній!');
       return;
     }
 
-    if (deliveryType === 'delivery' && !address) {
-      alert("Будь ласка, введіть адресу доставки!");
-      return;
+    let finalMessage = orderMessage + '\n';
+    finalMessage += `Імʼя: ${userName}\nТелефон: ${userPhone}\n`;
+    finalMessage += `Тип: ${deliveryType === 'delivery' ? 'Доставка' : 'Самовивіз'}\n`;
+    if (deliveryType === 'delivery') {
+      finalMessage += `Адреса: ${userAddress}\n`;
     }
 
-    const fullMessage = `
-🛒 ЗАМОВЛЕННЯ №${orderNumber}:
-------------------------
-👤 Імʼя: ${name}
-📞 Телефон: ${phone}
-${deliveryType === 'delivery' ? `🏠 Адреса: ${address}` : "🏠 Самовивіз"}
-------------------------
-${message}
-    `;
+    // Здесь можно сделать отправку через API, форму, или WhatsApp-ссылку
+    alert('Замовлення надіслано! Деталі:\n' + finalMessage);
 
-    fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        chat_id: CHAT_ID,
-        text: fullMessage
-      })
-    })
-    .then(res => {
-      if (res.ok) {
-        alert(`Дякую за замовлення №${orderNumber}!`);
-        orderNumber++;
-        localStorage.setItem('orderNumber', orderNumber);
-        cart = [];
-        renderCart();
-        updateAllButtons();
-        closeCart();
-        document.getElementById("user-name").value = "";
-        document.getElementById("user-phone").value = "";
-        document.getElementById("user-address").value = "";
-        toggleAddress(false);
-      } else {
-        alert("Помилка при надсиланні. Спробуйте ще раз.");
-      }
-    })
-    .catch(err => {
-      console.error(err);
-      alert("Помилка мережі.");
-    });
+    cart.length = 0; // Очистить корзину
+    updateCartUI();
+    closeCart();
+
+    document.getElementById('user-name').value = '';
+    document.getElementById('user-phone').value = '';
+    document.getElementById('user-address').value = '';
+    document.getElementById('order-message').value = '';
   }
 
-  function updateAllButtons() {
-    const allDishes = document.querySelectorAll(".dish h3");
-    allDishes.forEach(dish => {
-      const name = dish.textContent;
-      updateButtonText(name);
-    });
-  }
-
-  const scrollTopBtn = document.getElementById("scrollTopBtn");
-  window.onscroll = function() {
-    if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
-      scrollTopBtn.style.display = "block";
+  window.onscroll = function() {scrollFunction()};
+  const scrollBtn = document.getElementById("scrollTopBtn");
+  function scrollFunction() {
+    if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+      scrollBtn.style.display = "block";
     } else {
-      scrollTopBtn.style.display = "none";
+      scrollBtn.style.display = "none";
     }
-  };
-
+  }
   function scrollToTop() {
-    window.scrollTo({top: 0, behavior: 'smooth'});
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 </script>
 
