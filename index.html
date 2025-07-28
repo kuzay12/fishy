@@ -366,7 +366,7 @@
     }
   }
 
-  function submitOrder() {
+ function submitOrder() {
   const userName = document.getElementById('user-name').value.trim();
   const userPhone = document.getElementById('user-phone').value.trim();
   const deliveryType = document.querySelector('input[name="delivery-type"]:checked').value;
@@ -385,7 +385,6 @@
     return;
   }
 
-  // Формируем сообщение с заказом
   let message = "Нове замовлення:\n";
   let total = 0;
   cart.forEach(item => {
@@ -399,7 +398,6 @@
     message += `Адреса: ${userAddress}\n`;
   }
 
-  // Отправляем на Make webhook
   fetch('https://hook.eu2.make.com/ku3mn9wsl701wjs4hmbclp1mgppijmeo', {
     method: 'POST',
     headers: {
@@ -410,7 +408,6 @@
   .then(response => {
     if (response.ok) {
       alert('Замовлення успішно надіслано!');
-      // Очистка корзины и формы
       cart.length = 0;
       updateCartUI();
       document.getElementById('user-name').value = '';
