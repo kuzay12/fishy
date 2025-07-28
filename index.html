@@ -382,57 +382,75 @@
     }
   }
 
-  function submitOrder() {
-    const name = document.getElementById('user-name').value.trim();
-    const phone = document.getElementById('user-phone').value.trim();
-    const deliveryType = document.querySelector('input[name="delivery-type"]:checked').value;
-    const address = document.getElementById('user-address').value.trim();
+ function submitOrder() {
+  const name = document.getElementById('user-name').value.trim();
+  const phone = document.getElementById('user-phone').value.trim();
+  const deliveryType = document.querySelector('input[name="delivery-type"]:checked').value;
+  const address = document.getElementById('user-address').value.trim();
 
-    if (!name) {
-      alert('Введіть ваше імʼя');
-      return;
-    }
-    if (!phone) {
-      alert('Введіть телефон');
-      return;
-    }
-    if (deliveryType === 'delivery' && !address) {
-      alert('Введіть адресу доставки');
-      return;
-    }
-    if(Object.keys(cart).length === 0) {
-      alert('Кошик порожній');
-      return;
-    }
+  if (!name) {
+    alert('Введіть ваше імʼя');
+    return;
+  }
+  if (!phone) {
+    alert('Введіть телефон');
+    return;
+  }
+  if (deliveryType === 'delivery' && !address) {
+    alert('Введіть адресу доставки');
+    return;
+  }
+  if(Object.keys(cart).length === 0) {
+    alert('Кошик порожній');
+    return;
+  }
 
-    // Формируем сообщение для отправки
-    let message = `Нове замовлення:\n`;
-    for (const [itemName, itemData] of Object.entries(cart)) {
-      message += `${itemName} — ${itemData.price} грн × ${itemData.count}\n`;
+  // Формируем список заказанных товаров
+  let orderList = '';
+  let total = 0;
+  for (const [itemName, itemData] of Object.entries(cart)) {
+    orderList += `${itemName} — ${itemData.price} грн × ${itemData.count}\n`;
+    total += itemData.price * itemData.count;
+  }
+
+  // Формируем объект с данными для отправки в Zapier
+  const data = {
+    Name: name,
+    Phone: phone,
+    OrderList: orderList.trim(),
+    Total: total,
+    DeliveryType: deliveryType === 'delivery' ? 'Доставка' : 'Самовивіз',
+    Address: deliveryType === 'delivery' ? address : ''
+  };
+
+  fetch('https://hooks.zapier.com/hooks/catch/23978339/uue1ftb/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  })
+  .then(response => {
+    if (response.ok) {
+      alert('Замовлення відправлено!');
+      // Очистка корзины и формы
+      for (const key in cart) {
+        delete cart[key];
+      }
+      updateCartDisplay();
+      updateMenuButtons();
+
+      document.getElementById('user-name').value = '';
+      document.getElementById('user-phone').value = '';
+      document.getElementById('user-address').value = '';
+      toggleAddress(false);
+      closeCart();
+    } else {
+      alert('Помилка при відправленні замовлення. Спробуйте ще раз.');
     }
-    message += `Сума: ${document.getElementById('cart-total').textContent} грн\n`;
-    message += `Імʼя: ${name}\nТелефон: ${phone}\nТип доставки: ${deliveryType === 'delivery' ? 'Доставка' : 'Самовивіз'}`;
-    if (deliveryType === 'delivery') {
-      message += `\nАдреса: ${address}`;
-    }
-
-    // Здесь можешь добавить код отправки сообщения на Telegram через webhook
-    // Например, fetch('https://hook.eu2.make.com/ku3mn9wsl701wjs4hmbclp1mgppijmeo', {method:'POST', body: JSON.stringify({text: message})})
-
-    alert('Замовлення відправлено!\n' + message);
-
-    // Очистка корзины и формы
-    for (const key in cart) {
-      delete cart[key];
-    }
-    updateCartDisplay();
-    updateMenuButtons();
-
-    document.getElementById('user-name').value = '';
-    document.getElementById('user-phone').value = '';
-    document.getElementById('user-address').value = '';
-    toggleAddress(false);
-    closeCart();
+  })
+  .catch(() => {
+    alert('Помилка при відправленні замовлення. Спробуйте ще раз.');
+  });
+}
   }
 
   // Кнопка скролла вверх
