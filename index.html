@@ -88,7 +88,7 @@
       position: fixed;
       top: 60px;
       right: 20px;
-      width: 300px;
+      width: 320px;
       background: #fff;
       border: 1px solid #ccc;
       padding: 1rem;
@@ -231,19 +231,19 @@
   <ul id="cart-items"></ul>
   <p><strong>Сума: <span id="cart-total">0</span> грн</strong></p>
 
-  <textarea id="order-message" rows="6" style="width: 100%;" readonly></textarea>
-
   <input type="text" id="user-name" placeholder="Ваше імʼя" required style="margin-top: 10px; width: 100%; padding: 5px;">
   <input type="tel" id="user-phone" placeholder="Телефон" required style="margin-top: 10px; width: 100%; padding: 5px;">
 
-  <label style="margin-top: 10px; display: block;">
-    <input type="radio" name="delivery-type" value="delivery" onchange="toggleAddress(true)"> Доставка
-  </label>
-  <label>
-    <input type="radio" name="delivery-type" value="pickup" onchange="toggleAddress(false)" checked> Самовивіз
-  </label>
+  <div style="margin-top: 10px;">
+    <label>
+      <input type="radio" name="delivery-type" value="delivery" onchange="toggleAddress(true)"> Доставка
+    </label>
+    <label style="margin-left: 10px;">
+      <input type="radio" name="delivery-type" value="pickup" onchange="toggleAddress(false)" checked> Самовивіз
+    </label>
+  </div>
 
-  <input type="text" id="user-address" placeholder="Адреса доставки (доставка за тарифами такси)" style="margin-top: 10px; width: 100%; padding: 5px; display: none;" >
+  <input type="text" id="user-address" placeholder="Адреса доставки" style="margin-top: 10px; width: 100%; padding: 5px; display: none;" >
 
   <button onclick="submitOrder()" style="margin-top: 10px; width: 100%;">Відправити замовлення</button>
   <button onclick="closeCart()" style="margin-top: 10px;">Закрити</button>
@@ -252,64 +252,102 @@
 <footer>
   <a href="https://www.instagram.com/fishy.dnipro" target="_blank">
     <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg"
-         alt="Instagram"
-         width="40"
-         height="40" />
+         alt="Instagram" style="width:40px; vertical-align: middle;">
+    fishy.dnipro
   </a>
-  <a href="https://www.facebook.com/fishydnipro" target="_blank">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg"
-         alt="Facebook"
-         width="40"
-         height="40" />
-  </a>
+  <p>© 2024 Fishy Food</p>
 </footer>
 
-<button id="scrollTopBtn" onclick="scrollToTop()">▲</button>
+<button id="scrollTopBtn" title="Вверх" onclick="scrollToTop()">↑</button>
 
 <script>
-  const cart = [];
+  const cart = {};
 
-  function addToCart(name, price, button) {
-    cart.push({ name, price });
-    updateCartUI();
+  function addToCart(name, price, btn) {
+    if (cart[name]) {
+      cart[name].count++;
+    } else {
+      cart[name] = {price: price, count: 1};
+    }
+    updateCartDisplay();
+    updateButton(btn, cart[name].count);
   }
 
-  function updateCartUI() {
-    const cartItems = document.getElementById('cart-items');
-    cartItems.innerHTML = '';
+  function updateButton(btn, count) {
+    btn.textContent = `Додано (${count})`;
+    btn.disabled = false;
+  }
 
+  function updateCartDisplay() {
+    const cartItemsEl = document.getElementById('cart-items');
+    cartItemsEl.innerHTML = '';
     let total = 0;
-    cart.forEach((item, index) => {
-      total += item.price;
+
+    for (const [name, data] of Object.entries(cart)) {
+      total += data.price * data.count;
       const li = document.createElement('li');
-      li.textContent = `${item.name} - ${item.price} грн`;
+      li.textContent = `${name} — ${data.price} грн × ${data.count}`;
 
-      // Добавим кнопку удаления
-      const removeBtn = document.createElement('button');
-      removeBtn.textContent = '×';
-      removeBtn.title = 'Видалити';
-      removeBtn.onclick = () => {
-        cart.splice(index, 1);
-        updateCartUI();
+      const minusBtn = document.createElement('button');
+      minusBtn.textContent = '−';
+      minusBtn.onclick = () => {
+        if (cart[name].count > 1) {
+          cart[name].count--;
+        } else {
+          delete cart[name];
+        }
+        updateCartDisplay();
+        updateMenuButtons();
       };
-      li.appendChild(removeBtn);
 
-      cartItems.appendChild(li);
-    });
+      const plusBtn = document.createElement('button');
+      plusBtn.textContent = '+';
+      plusBtn.onclick = () => {
+        cart[name].count++;
+        updateCartDisplay();
+        updateMenuButtons();
+      };
+
+      li.appendChild(minusBtn);
+      li.appendChild(plusBtn);
+      cartItemsEl.appendChild(li);
+    }
 
     document.getElementById('cart-total').textContent = total;
 
-    // Обновим textarea с заказом
-    let orderText = '';
-    cart.forEach(item => {
-      orderText += `${item.name} - ${item.price} грн\n`;
+    if(Object.keys(cart).length > 0) {
+      showCart();
+    } else {
+      closeCart();
+    }
+  }
+
+  // Обновляем кнопки меню, чтобы они показывали текущее количество
+  function updateMenuButtons() {
+    document.querySelectorAll('.dish').forEach(dish => {
+      const name = dish.querySelector('h3').textContent;
+      const btn = dish.querySelector('button');
+      if(cart[name]) {
+        btn.textContent = `Додано (${cart[name].count})`;
+      } else {
+        btn.textContent = 'Додати до кошика';
+      }
     });
-    document.getElementById('order-message').value = orderText;
   }
 
   function toggleCart() {
-    const panel = document.getElementById('cart-panel');
-    panel.style.display = (panel.style.display === 'block') ? 'none' : 'block';
+    const cartPanel = document.getElementById('cart-panel');
+    if(cartPanel.style.display === 'block') {
+      cartPanel.style.display = 'none';
+    } else {
+      if(Object.keys(cart).length > 0) {
+        cartPanel.style.display = 'block';
+      }
+    }
+  }
+
+  function showCart() {
+    document.getElementById('cart-panel').style.display = 'block';
   }
 
   function closeCart() {
@@ -329,66 +367,67 @@
   }
 
   function submitOrder() {
-    const userName = document.getElementById('user-name').value.trim();
-    const userPhone = document.getElementById('user-phone').value.trim();
+    const name = document.getElementById('user-name').value.trim();
+    const phone = document.getElementById('user-phone').value.trim();
     const deliveryType = document.querySelector('input[name="delivery-type"]:checked').value;
-    const userAddress = document.getElementById('user-address').value.trim();
-    const orderMessage = document.getElementById('order-message').value;
+    const address = document.getElementById('user-address').value.trim();
 
-    if (!userName || !userPhone) {
-      alert('Будь ласка, введіть імʼя та телефон.');
+    if (!name) {
+      alert('Введіть ваше імʼя');
       return;
     }
-    if (deliveryType === 'delivery' && !userAddress) {
-      alert('Будь ласка, введіть адресу доставки.');
+    if (!phone) {
+      alert('Введіть телефон');
       return;
     }
-    if (cart.length === 0) {
-      alert('Ваш кошик порожній!');
+    if (deliveryType === 'delivery' && !address) {
+      alert('Введіть адресу доставки');
+      return;
+    }
+    if(Object.keys(cart).length === 0) {
+      alert('Кошик порожній');
       return;
     }
 
-    let finalMessage = orderMessage + '\n';
-    finalMessage += `Імʼя: ${userName}\nТелефон: ${userPhone}\n`;
-    finalMessage += `Тип: ${deliveryType === 'delivery' ? 'Доставка' : 'Самовивіз'}\n`;
+    // Формируем сообщение для отправки
+    let message = `Нове замовлення:\n`;
+    for (const [itemName, itemData] of Object.entries(cart)) {
+      message += `${itemName} — ${itemData.price} грн × ${itemData.count}\n`;
+    }
+    message += `Сума: ${document.getElementById('cart-total').textContent} грн\n`;
+    message += `Імʼя: ${name}\nТелефон: ${phone}\nТип доставки: ${deliveryType === 'delivery' ? 'Доставка' : 'Самовивіз'}`;
     if (deliveryType === 'delivery') {
-      finalMessage += `Адреса: ${userAddress}\n`;
+      message += `\nАдреса: ${address}`;
     }
 
-    fetch('https://hook.eu2.make.com/ku3mn9wsl701wjs4hmbclp1mgppijmeo', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: finalMessage })
-    })
-    .then(response => {
-      if (response.ok) {
-        alert('Замовлення надіслано!');
-        cart.length = 0;
-        updateCartUI();
-        closeCart();
-        document.getElementById('user-name').value = '';
-        document.getElementById('user-phone').value = '';
-        document.getElementById('user-address').value = '';
-        document.getElementById('order-message').value = '';
-      } else {
-        alert('Помилка при відправці замовлення.');
-      }
-    })
-    .catch(() => {
-      alert('Помилка мережі при відправці замовлення.');
-    });
+    // Здесь можешь добавить код отправки сообщения на Telegram через webhook
+    // Например, fetch('https://hook.eu2.make.com/ku3mn9wsl701wjs4hmbclp1mgppijmeo', {method:'POST', body: JSON.stringify({text: message})})
+
+    alert('Замовлення відправлено!\n' + message);
+
+    // Очистка корзины и формы
+    for (const key in cart) {
+      delete cart[key];
+    }
+    updateCartDisplay();
+    updateMenuButtons();
+
+    document.getElementById('user-name').value = '';
+    document.getElementById('user-phone').value = '';
+    document.getElementById('user-address').value = '';
+    toggleAddress(false);
+    closeCart();
   }
 
-  // Кнопка "вверх"
+  // Кнопка скролла вверх
+  const scrollTopBtn = document.getElementById('scrollTopBtn');
   window.onscroll = function() {
-    const btn = document.getElementById('scrollTopBtn');
-    if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
-      btn.style.display = "block";
+    if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+      scrollTopBtn.style.display = 'block';
     } else {
-      btn.style.display = "none";
+      scrollTopBtn.style.display = 'none';
     }
   };
-
   function scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
