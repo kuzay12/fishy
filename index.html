@@ -28,9 +28,6 @@
       padding: 0.5rem;
       text-align: center;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      position: sticky;
-      top: 0;
-      z-index: 999;
     }
     nav a {
       margin: 0 1rem;
@@ -79,10 +76,6 @@
       color: white;
       border-radius: 4px;
       cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    button:hover {
-      background: #e65c00;
     }
     footer {
       background-color: #000;
@@ -170,10 +163,6 @@
 <nav>
   <a href="#breakfasts">Сніданки</a>
   <a href="#salads">Салати</a>
-  <a href="#chef-dishes">Страви від Шефа</a>
-  <a href="#desserts">Десерти</a>
-  <a href="#coffee">Кава</a>
-  <a href="#drinks">Холодні напої</a>
   <a href="#icecream">Морозиво</a>
 </nav>
 
@@ -183,25 +172,25 @@
     <img src="Сендвіч з лососем.png" alt="Сендвіч з лососем" />
     <h3>Сендвіч з лососем</h3>
     <p>165 грн</p>
-    <button onclick="addToCart('Сендвіч з лососем', 165)">Додати до кошика</button>
+    <button onclick="addToCart('Сендвіч з лососем', 165, this)">Додати до кошика</button>
   </div>
   <div class="dish">
     <img src="Сендвіч лосось авокадо.png" alt="Сендвіч лосось авокадо" />
     <h3>Сендвіч лосось авокадо</h3>
     <p>185 грн</p>
-    <button onclick="addToCart('Сендвіч лосось авокадо', 185)">Додати до кошика</button>
+    <button onclick="addToCart('Сендвіч лосось авокадо', 185, this)">Додати до кошика</button>
   </div>
   <div class="dish">
     <img src="Омлет з креветкою.png" alt="Омлет з креветкою" />
     <h3>Омлет з креветкою</h3>
     <p>175 грн</p>
-    <button onclick="addToCart('Омлет з креветкою', 175)">Додати до кошика</button>
+    <button onclick="addToCart('Омлет з креветкою', 175, this)">Додати до кошика</button>
   </div>
   <div class="dish">
     <img src="Вівсянка з креветкою.png" alt="Вівсянка з креветкою та страчетелою" />
     <h3>Вівсянка з креветкою та страчетелою</h3>
     <p>295 грн</p>
-    <button onclick="addToCart('Вівсянка з креветкою та страчетелою', 295)">Додати до кошика</button>
+    <button onclick="addToCart('Вівсянка з креветкою та страчетелою', 295, this)">Додати до кошика</button>
   </div>
 </main>
 
@@ -211,77 +200,7 @@
     <img src="Цезар з лососем.png" alt="Цезар з лососем" />
     <h3>Цезар з лососем</h3>
     <p>315 грн</p>
-    <button onclick="addToCart('Цезар з лососем', 315)">Додати до кошика</button>
-  </div>
-</main>
-
-<h2 class="section-title" id="chef-dishes">Страви від Шефа</h2>
-<main class="menu">
-  <div class="dish">
-    <img src="Філе дорадо з овочами.png" alt="Філе дорадо з овочами" />
-    <h3>Філе дорадо з овочами</h3>
-    <p>390 грн</p>
-    <button onclick="addToCart('Філе дорадо з овочами', 390)">Додати до кошика</button>
-  </div>
-  <div class="dish">
-    <img src="Креветки в часниковому соусі.png" alt="Креветки в часниковому соусі" />
-    <h3>Креветки в часниковому соусі</h3>
-    <p>350 грн</p>
-    <button onclick="addToCart('Креветки в часниковому соусі', 350)">Додати до кошика</button>
-  </div>
-</main>
-
-<h2 class="section-title" id="desserts">Десерти</h2>
-<main class="menu">
-  <div class="dish">
-    <img src="Чізкейк.png" alt="Чізкейк" />
-    <h3>Чізкейк</h3>
-    <p>150 грн</p>
-    <button onclick="addToCart('Чізкейк', 150)">Додати до кошика</button>
-  </div>
-  <div class="dish">
-    <img src="Шоколадний мус.png" alt="Шоколадний мус" />
-    <h3>Шоколадний мус</h3>
-    <p>140 грн</p>
-    <button onclick="addToCart('Шоколадний мус', 140)">Додати до кошика</button>
-  </div>
-</main>
-
-<h2 class="section-title" id="coffee">Кава</h2>
-<main class="menu">
-  <div class="dish">
-    <img src="Еспресо.png" alt="Еспресо" />
-    <h3>Еспресо</h3>
-    <p>50 грн</p>
-    <button onclick="addToCart('Еспресо', 50)">Додати до кошика</button>
-  </div>
-  <div class="dish">
-    <img src="Капучино.png" alt="Капучино" />
-    <h3>Капучино</h3>
-    <p>65 грн</p>
-    <button onclick="addToCart('Капучино', 65)">Додати до кошика</button>
-  </div>
-  <div class="dish">
-    <img src="Латте.png" alt="Латте" />
-    <h3>Латте</h3>
-    <p>70 грн</p>
-    <button onclick="addToCart('Латте', 70)">Додати до кошика</button>
-  </div>
-</main>
-
-<h2 class="section-title" id="drinks">Холодні напої</h2>
-<main class="menu">
-  <div class="dish">
-    <img src="Лимонад.png" alt="Лимонад" />
-    <h3>Лимонад</h3>
-    <p>60 грн</p>
-    <button onclick="addToCart('Лимонад', 60)">Додати до кошика</button>
-  </div>
-  <div class="dish">
-    <img src="Мінеральна вода.png" alt="Мінеральна вода" />
-    <h3>Мінеральна вода</h3>
-    <p>40 грн</p>
-    <button onclick="addToCart('Мінеральна вода', 40)">Додати до кошика</button>
+    <button onclick="addToCart('Цезар з лососем', 315, this)">Додати до кошика</button>
   </div>
 </main>
 
@@ -291,19 +210,19 @@
     <img src="Полуниця вершки.png" alt="Полуниця вершки" />
     <h3>Полуниця вершки</h3>
     <p>140 грн</p>
-    <button onclick="addToCart('Полуниця вершки', 140)">Додати до кошика</button>
+    <button onclick="addToCart('Полуниця вершки', 140, this)">Додати до кошика</button>
   </div>
   <div class="dish">
     <img src="Солона карамель.png" alt="Солона карамель" />
     <h3>Солона карамель</h3>
     <p>140 грн</p>
-    <button onclick="addToCart('Солона карамель', 140)">Додати до кошика</button>
+    <button onclick="addToCart('Солона карамель', 140, this)">Додати до кошика</button>
   </div>
   <div class="dish">
     <img src="Маракуйя-манго.png" alt="Маракуйя-манго" />
     <h3>Маракуйя-манго</h3>
     <p>155 грн</p>
-    <button onclick="addToCart('Маракуйя-манго', 155)">Додати до кошика</button>
+    <button onclick="addToCart('Маракуйя-манго', 155, this)">Додати до кошика</button>
   </div>
 </main>
 
@@ -317,18 +236,32 @@
   <input type="text" id="user-name" placeholder="Ваше імʼя" required style="margin-top: 10px; width: 100%; padding: 5px;">
   <input type="tel" id="user-phone" placeholder="Телефон" required style="margin-top: 10px; width: 100%; padding: 5px;">
 
-  <div style="margin-top:10px;">
-    <label><input type="radio" name="delivery-type" value="delivery" onchange="toggleAddress(true)" checked /> Доставка</label>
-    <label><input type="radio" name="delivery-type" value="pickup" onchange="toggleAddress(false)" /> Самовивіз</label>
-  </div>
-  <input type="text" id="user-address" placeholder="Адреса доставки" style="margin-top: 10px; width: 100%; padding: 5px;">
+  <label style="margin-top: 10px; display: block;">
+    <input type="radio" name="delivery-type" value="delivery" onchange="toggleAddress(true)"> Доставка
+  </label>
+  <label>
+    <input type="radio" name="delivery-type" value="pickup" onchange="toggleAddress(false)" checked> Самовивіз
+  </label>
 
-  <button style="margin-top: 10px; width: 100%;" onclick="submitOrder()">Оформити замовлення</button>
-  <button style="margin-top: 5px; width: 100%; background:#ccc; color:#333;" onclick="closeCart()">Закрити</button>
+  <input type="text" id="user-address" placeholder="Адреса доставки (доставка за тарифами такси)" style="margin-top: 10px; width: 100%; padding: 5px; display: none;" >
+
+  <button onclick="submitOrder()" style="margin-top: 10px; width: 100%;">Відправити замовлення</button>
+  <button onclick="closeCart()" style="margin-top: 10px;">Закрити</button>
 </div>
 
 <footer>
-  <div>fishyfood.store</div>
+  <a href="https://www.instagram.com/fishy.dnipro" target="_blank">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg"
+         alt="Instagram"
+         width="40"
+         height="40" />
+  </a>
+  <div style="margin-top: 10px; font-size: 14px; line-height: 1.5;">
+    [пн - нд 9:00 - 20:00] <br />
+    📍ЖК Рибінський | 📞 <a href="tel:+380963318856" style="color: white; text-decoration: underline;">+380963318856</a> <br />
+    Проспект Науки 112А <br />
+    Про нас: fishyfood.store
+  </div>
   <div class="map-container">
     <iframe
       src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2575.907494129461!2d35.00386631587337!3d48.46596377925014!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40dbe2e6c8d2fdbb%3A0x191296b6aa0806c!2z0JLQsNC90L7Qv9C-0YDQvtC70YzRgtCw0LnQvtC90LDRjyDQvdC40YHRjNC60LAgMTExLCDQodCw0YHRgtGMLCAxMDk!5e0!3m2!1suk!2sua!4v1683307011640!5m2!1suk!2sua"
@@ -347,7 +280,7 @@
 <script>
   const cart = [];
 
-  function addToCart(name, price) {
+  function addToCart(name, price, btn) {
     const existing = cart.find(item => item.name === name);
     if (existing) {
       existing.count++;
@@ -358,6 +291,7 @@
   }
 
   function updateCartUI() {
+    const cartPanel = document.getElementById('cart-panel');
     const cartItems = document.getElementById('cart-items');
     const cartTotal = document.getElementById('cart-total');
     const orderMessage = document.getElementById('order-message');
@@ -448,9 +382,10 @@
       finalMessage += `Адреса: ${userAddress}\n`;
     }
 
+    // Здесь можно сделать отправку через API, форму, или WhatsApp-ссылку
     alert('Замовлення надіслано! Деталі:\n' + finalMessage);
 
-    cart.length = 0;
+    cart.length = 0; // Очистить корзину
     updateCartUI();
     closeCart();
 
@@ -460,21 +395,18 @@
     document.getElementById('order-message').value = '';
   }
 
-  window.onscroll = function() {
-    const scrollBtn = document.getElementById("scrollTopBtn");
+  window.onscroll = function() {scrollFunction()};
+  const scrollBtn = document.getElementById("scrollTopBtn");
+  function scrollFunction() {
     if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
       scrollBtn.style.display = "block";
     } else {
       scrollBtn.style.display = "none";
     }
   }
-
   function scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-
-  // Изначально скрываем поле адреса, если самовивіз выбран по умолчанию — можно изменить по желанию
-  toggleAddress(true);
 </script>
 
 </body>
