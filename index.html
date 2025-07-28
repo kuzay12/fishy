@@ -18,23 +18,24 @@
       background-color: #222;
       padding: 1rem;
       color: white;
-      flex-wrap: wrap;
     }
     header img {
       height: 50px;
       border-radius: 50%;
     }
-    header nav {
-      display: flex;
-      gap: 1rem;
+    nav {
+      background-color: #fff;
+      padding: 0.5rem;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-    header nav a {
-      color: white;
+    nav a {
+      margin: 0 1rem;
       text-decoration: none;
+      color: #333;
       font-weight: bold;
-      transition: color 0.3s;
     }
-    header nav a:hover {
+    nav a:hover {
       color: #ff6600;
     }
     .section-title {
@@ -100,7 +101,6 @@
     @media (max-width: 600px) {
       header {
         flex-direction: column;
-        gap: 1rem;
       }
       .dish {
         width: 90%;
@@ -139,24 +139,6 @@
     #scrollTopBtn:hover {
       background-color: #e65c00;
     }
-    .toast {
-      position: absolute;
-      background-color: #28a745;
-      color: white;
-      padding: 5px 10px;
-      border-radius: 5px;
-      font-size: 0.9rem;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.4s ease;
-      z-index: 10000;
-      top: 10px;
-      right: 10px;
-    }
-    .toast.show {
-      opacity: 1;
-      pointer-events: auto;
-    }
     #cart-items button {
       background: #ff6600;
       color: white;
@@ -173,43 +155,74 @@
 <body>
 
 <header>
-  <div style="display: flex; align-items: center; gap: 1rem;">
-    <img src="logo.png" alt="Logo" />
-    <h1>Fishy Food</h1>
-  </div>
-  <nav>
-    <a href="#breakfast">Сніданки</a>
-    <a href="#salads">Салати</a>
-    <a href="#icecream">Морозиво</a>
-  </nav>
+  <img src="logo.png" alt="Logo" />
+  <h1>Fishy Food</h1>
   <button onclick="toggleCart()">🛒</button>
 </header>
 
-<h2 id="breakfast" class="section-title">Сніданки</h2>
+<nav>
+  <a href="#breakfasts">Сніданки</a>
+  <a href="#salads">Салати</a>
+  <a href="#icecream">Морозиво</a>
+</nav>
+
+<h2 class="section-title" id="breakfasts">Сніданки</h2>
 <main class="menu">
   <div class="dish">
     <img src="Сендвіч з лососем.png" alt="Сендвіч з лососем" />
     <h3>Сендвіч з лососем</h3>
     <p>165 грн</p>
-    <button onclick="addToCart('Сендвіч з лососем', 165, event)">Додати до кошика</button>
-  </div>
-  <div class="dish">
-    <img src="Омлет з креветкою.png" alt="Омлет з креветкою" />
-    <h3>Омлет з креветкою</h3>
-    <p>175 грн</p>
-    <button onclick="addToCart('Омлет з креветкою', 175, event)">Додати до кошика</button>
+    <button onclick="addToCart('Сендвіч з лососем', 165, this)">Додати до кошика</button>
   </div>
   <div class="dish">
     <img src="Сендвіч лосось авокадо.png" alt="Сендвіч лосось авокадо" />
     <h3>Сендвіч лосось авокадо</h3>
     <p>185 грн</p>
-    <button onclick="addToCart('Сендвіч лосось авокадо', 185, event)">Додати до кошика</button>
+    <button onclick="addToCart('Сендвіч лосось авокадо', 185, this)">Додати до кошика</button>
   </div>
   <div class="dish">
-    <img src="Вівсянка з креветкою та страчетелою.png" alt="Вівсянка з креветкою та страчетелою" />
+    <img src="Омлет з креветкою.png" alt="Омлет з креветкою" />
+    <h3>Омлет з креветкою</h3>
+    <p>175 грн</p>
+    <button onclick="addToCart('Омлет з креветкою', 175, this)">Додати до кошика</button>
+  </div>
+  <div class="dish">
+    <img src="Вівсянка з креветкою.png" alt="Вівсянка з креветкою та страчетелою" />
     <h3>Вівсянка з креветкою та страчетелою</h3>
     <p>295 грн</p>
-    <button onclick="addToCart('Вівсянка з креветкою та страчетелою', 295, event)">Додати до кошика</button>
+    <button onclick="addToCart('Вівсянка з креветкою та страчетелою', 295, this)">Додати до кошика</button>
+  </div>
+</main>
+
+<h2 class="section-title" id="salads">Салати</h2>
+<main class="menu">
+  <div class="dish">
+    <img src="Цезар з лососем.png" alt="Цезар з лососем" />
+    <h3>Цезар з лососем</h3>
+    <p>315 грн</p>
+    <button onclick="addToCart('Цезар з лососем', 315, this)">Додати до кошика</button>
+  </div>
+</main>
+
+<h2 class="section-title" id="icecream">Морозиво</h2>
+<main class="menu">
+  <div class="dish">
+    <img src="Полуниця вершки.png" alt="Полуниця вершки" />
+    <h3>Полуниця вершки</h3>
+    <p>140 грн</p>
+    <button onclick="addToCart('Полуниця вершки', 140, this)">Додати до кошика</button>
+  </div>
+  <div class="dish">
+    <img src="Солона карамель.png" alt="Солона карамель" />
+    <h3>Солона карамель</h3>
+    <p>140 грн</p>
+    <button onclick="addToCart('Солона карамель', 140, this)">Додати до кошика</button>
+  </div>
+  <div class="dish">
+    <img src="Маракуйя-манго.png" alt="Маракуйя-манго" />
+    <h3>Маракуйя-манго</h3>
+    <p>155 грн</p>
+    <button onclick="addToCart('Маракуйя-манго', 155, this)">Додати до кошика</button>
   </div>
 </main>
 
