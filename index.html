@@ -198,7 +198,7 @@
     <button onclick="addToCart('Омлет з креветкою', 175)">Додати до кошика</button>
   </div>
   <div class="dish">
-    <img src="Вівсянка з креветкою та страчетелою.png" alt="Вівсянка з креветкою та страчетелою" />
+    <img src="Вівсянка з креветкою.png" alt="Вівсянка з креветкою та страчетелою" />
     <h3>Вівсянка з креветкою та страчетелою</h3>
     <p>295 грн</p>
     <button onclick="addToCart('Вівсянка з креветкою та страчетелою', 295)">Додати до кошика</button>
@@ -218,18 +218,19 @@
 <h2 class="section-title" id="chef-dishes">Страви від Шефа</h2>
 <main class="menu">
   <div class="dish">
-    <img src="Смажені котлети.png" alt="Смажені котлети" />
-    <h3>Смажені котлети</h3>
-    <p>80 грн / 100 г</p>
-    <button onclick="addToCart('Смажені котлети (100 г)', 80)">Додати до кошика</button>
+    <img src="Філе дорадо з овочами.png" alt="Філе дорадо з овочами" />
+    <h3>Філе дорадо з овочами</h3>
+    <p>390 грн</p>
+    <button onclick="addToCart('Філе дорадо з овочами', 390)">Додати до кошика</button>
   </div>
   <div class="dish">
-    <img src="Тигрові креветки з томатами.png" alt="Тигрові креветки з томатами" />
-    <h3>Тигрові креветки з томатами</h3>
-    <p>330 грн</p>
-    <button onclick="addToCart('Тигрові креветки з томатами', 330)">Додати до кошика</button>
+    <img src="Креветки в часниковому соусі.png" alt="Креветки в часниковому соусі" />
+    <h3>Креветки в часниковому соусі</h3>
+    <p>350 грн</p>
+    <button onclick="addToCart('Креветки в часниковому соусі', 350)">Додати до кошика</button>
   </div>
 </main>
+
 <h2 class="section-title" id="desserts">Десерти</h2>
 <main class="menu">
   <div class="dish">
@@ -365,7 +366,7 @@
     let total = 0;
     cart.forEach(item => {
       const li = document.createElement('li');
-      li.textContent = ${item.name} x${item.count} — ${item.price * item.count} грн;
+      li.textContent = `${item.name} x${item.count} — ${item.price * item.count} грн`;
 
       const btnRemove = document.createElement('button');
       btnRemove.textContent = '-';
@@ -394,9 +395,9 @@
 
     let msg = "Замовлення:\n";
     cart.forEach(item => {
-      msg += ${item.name} x${item.count} — ${item.price * item.count} грн\n;
+      msg += `${item.name} x${item.count} — ${item.price * item.count} грн\n`;
     });
-    msg += \nСума: ${total} грн\n;
+    msg += `\nСума: ${total} грн\n`;
 
     orderMessage.value = msg;
   }
@@ -441,10 +442,10 @@
     }
 
     let finalMessage = orderMessage + '\n';
-    finalMessage += Імʼя: ${userName}\nТелефон: ${userPhone}\n;
-    finalMessage += Тип: ${deliveryType === 'delivery' ? 'Доставка' : 'Самовивіз'}\n;
+    finalMessage += `Імʼя: ${userName}\nТелефон: ${userPhone}\n`;
+    finalMessage += `Тип: ${deliveryType === 'delivery' ? 'Доставка' : 'Самовивіз'}\n`;
     if (deliveryType === 'delivery') {
-      finalMessage += Адреса: ${userAddress}\n;
+      finalMessage += `Адреса: ${userAddress}\n`;
     }
 
     alert('Замовлення надіслано! Деталі:\n' + finalMessage);
