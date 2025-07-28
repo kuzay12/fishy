@@ -231,51 +231,19 @@
   <ul id="cart-items"></ul>
   <p><strong>Сума: <span id="cart-total">0</span> грн</strong></p>
 
-  <input type="text" id="user-name" placeholder="Ваше імʼя" required style="margin-top: 10px; width: 100%; padding: 5px;">
-  <input type="tel" id="user-phone" placeholder="Телефон" required style="margin-top: 10px; width: 100%; padding: 5px;">
-
-  <div style="margin-top: 10px;">
-    <label>
-      <input type="radio" name="delivery-type" value="delivery" onchange="toggleAddress(true)"> Доставка
-    </label>
-    <label style="margin-left: 10px;">
-      <input type="radio" name="delivery-type" value="pickup" onchange="toggleAddress(false)" checked> Самовивіз
-    </label>
-  </div>
-
-  <input type="text" id="user-address" placeholder="Адреса доставки" style="margin-top: 10px; width: 100%; padding: 5px; display: none;" >
-
-  <button onclick="submitOrder()" style="margin-top: 10px; width: 100%;">Відправити замовлення</button>
-  <button onclick="closeCart()" style="margin-top: 10px;">Закрити</button>
+  <input type="text" id="user-name" placeholder="Ваше ім'я" />
+  <input type="text" id="user-phone" placeholder="Ваш телефон" />
+  <textarea id="user-address" placeholder="Адреса доставки"></textarea>
+  <button onclick="submitOrder()">Замовити</button>
+  <button onclick="closeCart()">Закрити</button>
 </div>
 
 <footer>
-  <div style="text-align: center; color: white;">
-    <p>🕘 пн - нд 9:00 - 20:00</p>
-    <p>📍 ЖК Рибінський, Проспект Науки 112Б</p>
-    <p>📞 <a href="tel:+380963318856" style="color: white;">+380963318856</a></p>
-    <p>Проєкт від <a href="https://t.me/seafood.dnepr" target="_blank" style="color: white;">@seafood.dnepr</a></p>
-    
-    <div style="margin: 20px 0;">
-      <iframe
-        src="https://www.google.com/maps?q=Проспект+Науки+112Б,+Дніпро&output=embed"
-        width="100%" height="300" style="border:0; border-radius: 10px;" allowfullscreen="" loading="lazy">
-      </iframe>
-    </div>
-
-    <div style="margin-top: 10px;">
-      <a href="https://www.instagram.com/fishy.dnipro" target="_blank" style="text-decoration: none; color: white;">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg"
-             alt="Instagram" style="width: 30px; vertical-align: middle; margin-right: 8px;">
-        fishy.dnipro
-      </a>
-    </div>
-    <p style="margin-top: 10px;">© 2024 Fishy Food</p>
-  </div>
+  <p>© 2023 Fishy Food. Всі права захищені.</p>
+  <p>Розроблено: Аля, Анастасія, Аліна</p>
 </footer>
 
-
-<button id="scrollTopBtn" title="Вверх" onclick="scrollToTop()">↑</button>
+<button onclick="scrollToTop()" id="scrollTopBtn" title="Вгору">↑</button>
 
 <script>
   const cart = {};
@@ -284,14 +252,14 @@
     if (cart[name]) {
       cart[name].count++;
     } else {
-      cart[name] = {price: price, count: 1};
+      cart[name] = { price: price, count: 1 };
     }
     updateCartDisplay();
     updateButton(btn, cart[name].count);
   }
 
   function updateButton(btn, count) {
-    btn.textContent = Додано (${count});
+    btn.textContent = `Додано (${count})`;
     btn.disabled = false;
   }
 
@@ -303,7 +271,7 @@
     for (const [name, data] of Object.entries(cart)) {
       total += data.price * data.count;
       const li = document.createElement('li');
-      li.textContent = ${name} — ${data.price} грн × ${data.count};
+      li.textContent = `${name} — ${data.price} грн × ${data.count}`;
 
       const minusBtn = document.createElement('button');
       minusBtn.textContent = '−';
@@ -332,35 +300,25 @@
 
     document.getElementById('cart-total').textContent = total;
 
-    if(Object.keys(cart).length > 0) {
+    if (Object.keys(cart).length > 0) {
       showCart();
     } else {
       closeCart();
     }
   }
 
-  // Обновляем кнопки меню, чтобы они показывали текущее количество
   function updateMenuButtons() {
     document.querySelectorAll('.dish').forEach(dish => {
       const name = dish.querySelector('h3').textContent;
       const btn = dish.querySelector('button');
-      if(cart[name]) {
-        btn.textContent = Додано (${cart[name].count});
+      if (cart[name]) {
+        btn.textContent = `Додано (${cart[name].count})`;
+        btn.disabled = false;
       } else {
         btn.textContent = 'Додати до кошика';
+        btn.disabled = false;
       }
     });
-  }
-
-  function toggleCart() {
-    const cartPanel = document.getElementById('cart-panel');
-    if(cartPanel.style.display === 'block') {
-      cartPanel.style.display = 'none';
-    } else {
-      if(Object.keys(cart).length > 0) {
-        cartPanel.style.display = 'block';
-      }
-    }
   }
 
   function showCart() {
@@ -371,80 +329,53 @@
     document.getElementById('cart-panel').style.display = 'none';
   }
 
-  function toggleAddress(show) {
-    const addressInput = document.getElementById('user-address');
-    if (show) {
-      addressInput.style.display = 'block';
-      addressInput.required = true;
+  function toggleCart() {
+    const panel = document.getElementById('cart-panel');
+    if (panel.style.display === 'block') {
+      closeCart();
     } else {
-      addressInput.style.display = 'none';
-      addressInput.required = false;
-      addressInput.value = '';
+      showCart();
     }
   }
 
   function submitOrder() {
     const name = document.getElementById('user-name').value.trim();
     const phone = document.getElementById('user-phone').value.trim();
-    const deliveryType = document.querySelector('input[name="delivery-type"]:checked').value;
     const address = document.getElementById('user-address').value.trim();
 
-    if (!name) {
-      alert('Введіть ваше імʼя');
-      return;
-    }
-    if (!phone) {
-      alert('Введіть телефон');
-      return;
-    }
-    if (deliveryType === 'delivery' && !address) {
-      alert('Введіть адресу доставки');
-      return;
-    }
-    if(Object.keys(cart).length === 0) {
-      alert('Кошик порожній');
+    if (!name || !phone || !address) {
+      alert('Будь ласка, заповніть всі поля для замовлення.');
       return;
     }
 
-    // Формируем сообщение для отправки
-    let message = Нове замовлення:\n;
-    for (const [itemName, itemData] of Object.entries(cart)) {
-      message += ${itemName} — ${itemData.price} грн × ${itemData.count}\n;
-    }
-    message += Сума: ${document.getElementById('cart-total').textContent} грн\n;
-    message += Імʼя: ${name}\nТелефон: ${phone}\nТип доставки: ${deliveryType === 'delivery' ? 'Доставка' : 'Самовивіз'};
-    if (deliveryType === 'delivery') {
-      message += \nАдреса: ${address};
+    if (Object.keys(cart).length === 0) {
+      alert('Ваш кошик порожній!');
+      return;
     }
 
-    // Здесь можешь добавить код отправки сообщения на Telegram через webhook
-    // Например, fetch('https://hook.eu2.make.com/ku3mn9wsl701wjs4hmbclp1mgppijmeo', {method:'POST', body: JSON.stringify({text: message})})
+    alert(`Дякуємо за замовлення, ${name}! Ми зателефонуємо вам найближчим часом.`);
+    // Здесь можно добавить логику отправки данных на сервер
 
-    alert('Замовлення відправлено!\n' + message);
-
-    // Очистка корзины и формы
-    for (const key in cart) {
-      delete cart[key];
-    }
+    // Очистка корзины и полей
+    for (let key in cart) delete cart[key];
     updateCartDisplay();
-    updateMenuButtons();
 
     document.getElementById('user-name').value = '';
     document.getElementById('user-phone').value = '';
     document.getElementById('user-address').value = '';
-    toggleAddress(false);
     closeCart();
   }
 
-  // Кнопка скролла вверх
-  const scrollTopBtn = document.getElementById('scrollTopBtn');
-  window.onscroll = function() {
+  // Кнопка "Вгору"
+  const scrollBtn = document.getElementById('scrollTopBtn');
+  window.onscroll = function () {
     if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-      scrollTopBtn.style.display = 'block';
+      scrollBtn.style.display = 'block';
     } else {
-      scrollTopBtn.style.display = 'none';
+      scrollBtn.style.display = 'none';
     }
   };
+
   function scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
