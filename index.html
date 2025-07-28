@@ -272,28 +272,35 @@
       cart.push({ name, price, qty: 1 });
     }
     renderCart();
-
-    // Показываем уведомление "Додано 1 шт" рядом с кнопкой
-    const button = event.currentTarget;
-    let toast = button.parentElement.querySelector('.toast');
-
-    if (!toast) {
-      toast = document.createElement('div');
-      toast.className = 'toast';
-      toast.textContent = 'Додано 1 шт';
-      button.parentElement.appendChild(toast);
-    }
-
-    toast.classList.add('show');
-
-    setTimeout(() => {
-      toast.classList.remove('show');
-    }, 1500);
+    updateButtonText(name);
   }
 
   function removeFromCart(name) {
-    cart = cart.filter(item => item.name !== name);
+    const item = cart.find(i => i.name === name);
+    if (item) {
+      item.qty -= 1;
+      if (item.qty <= 0) {
+        cart = cart.filter(i => i.name !== name);
+      }
+    }
     renderCart();
+    updateButtonText(name);
+  }
+
+  function updateButtonText(name) {
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(btn => {
+      const parent = btn.parentElement;
+      const title = parent.querySelector('h3');
+      if (title && title.textContent === name) {
+        const item = cart.find(i => i.name === name);
+        if (item) {
+          btn.textContent = `Додано (${item.qty} шт)`;
+        } else {
+          btn.textContent = "Додати до кошика";
+        }
+      }
+    });
   }
 
   function renderCart() {
@@ -311,11 +318,13 @@
       li.innerHTML = `${item.name} × ${item.qty} — ${item.price * item.qty} грн 
         <button onclick="removeFromCart('${item.name}')">🗑</button>`;
       cartItems.appendChild(li);
-      message += `${item.name} × ${item.qty} — ${item.price * item.qty} грн\n`;
+      message += `${item.name} × ${item.qty} — ${item.price * item.qty} грн
+`;
     });
 
     total.textContent = sum;
-    message += `\nЗагальна сума: ${sum} грн`;
+    message += `
+Загальна сума: ${sum} грн`;
     if (orderMessage) orderMessage.value = message;
   }
 
@@ -389,11 +398,12 @@ ${message}
         localStorage.setItem('orderNumber', orderNumber);
         cart = [];
         renderCart();
-        closeCart();
         document.getElementById("user-name").value = "";
         document.getElementById("user-phone").value = "";
         document.getElementById("user-address").value = "";
         toggleAddress(false);
+        updateAllButtons();
+        closeCart();
       } else {
         alert("Помилка при надсиланні. Спробуйте ще раз.");
       }
@@ -404,7 +414,15 @@ ${message}
     });
   }
 
-  // Кнопка "вверх" — показать при прокрутке вниз на 200px
+  function updateAllButtons() {
+    const allDishes = document.querySelectorAll(".dish h3");
+    allDishes.forEach(dish => {
+      const name = dish.textContent;
+      updateButtonText(name);
+    });
+  }
+
+  // Кнопка "вверх"
   const scrollTopBtn = document.getElementById("scrollTopBtn");
   window.onscroll = function() {
     if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
