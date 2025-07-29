@@ -246,7 +246,6 @@
     <label style="margin-left: 10px;">
       <input type="radio" name="delivery-type" value="pickup" onchange="toggleAddress(false)" checked> Самовивіз
     </label>
-    </div>
   </div>
 
   <input type="text" id="user-address" placeholder="Адреса доставки" style="margin-top: 10px; width: 100%; padding: 5px; display: none;" >
@@ -296,7 +295,7 @@
   }
 
   function updateButton(btn, count) {
-    btn.textContent = `Додано (${count})`;
+    btn.textContent = Додано (${count});
     btn.disabled = false;
   }
 
@@ -310,7 +309,7 @@
       total += data.price * data.count;
       totalCount += data.count;
       const li = document.createElement('li');
-      li.textContent = `${name} — ${data.price} грн × ${data.count}`;
+      li.textContent = ${name} — ${data.price} грн × ${data.count};
 
       const minusBtn = document.createElement('button');
       minusBtn.textContent = '−';
@@ -350,7 +349,7 @@
       const name = dish.querySelector('h3').textContent;
       const btn = dish.querySelector('button');
       if(cart[name]) {
-        btn.textContent = `Додано (${cart[name].count})`;
+        btn.textContent = Додано (${cart[name].count});
       } else {
         btn.textContent = 'Додати до кошика';
       }
@@ -374,47 +373,45 @@
   }
 
   function submitOrder() {
-  const name = document.getElementById('user-name').value.trim();
-  const phone = document.getElementById('user-phone').value.trim();
-  const deliveryType = document.querySelector('input[name="delivery-type"]:checked').value;
-  const address = document.getElementById('user-address').value.trim();
-  const status = document.querySelector('input[name="payment-status"]:checked').value; // ✅
+    const name = document.getElementById('user-name').value.trim();
+    const phone = document.getElementById('user-phone').value.trim();
+    const deliveryType = document.querySelector('input[name="delivery-type"]:checked').value;
+    const address = document.getElementById('user-address').value.trim();
 
-  if (!name) return alert('Введіть ваше імʼя');
-  if (!phone) return alert('Введіть телефон');
-  if (deliveryType === 'delivery' && !address) return alert('Введіть адресу доставки');
-  if (Object.keys(cart).length === 0) return alert('Кошик порожній');
+    if (!name) return alert('Введіть ваше імʼя');
+    if (!phone) return alert('Введіть телефон');
+    if (deliveryType === 'delivery' && !address) return alert('Введіть адресу доставки');
+    if (Object.keys(cart).length === 0) return alert('Кошик порожній');
 
-  fetch('https://fishy-a89x.onrender.com/order', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-      name,
-      phone,
-      address: deliveryType === 'delivery' ? address : '',
-      cart,
-      status // ✅ отправляем статус
+    fetch('https://fishy-a89x.onrender.com/order', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        name,
+        phone,
+        address: deliveryType === 'delivery' ? address : '',
+        cart
+      })
     })
-  })
-  .then(res => {
-    if (!res.ok) throw new Error('Server error');
-    return res.json();
-  })
-  .then(data => {
-    alert('Замовлення відправлено!');
-    Object.keys(cart).forEach(k => delete cart[k]);
-    updateCartDisplay();
-    document.getElementById('user-name').value = '';
-    document.getElementById('user-phone').value = '';
-    document.getElementById('user-address').value = '';
-    updateMenuButtons();
-    closeCart();
-  })
-  .catch(err => {
-    alert('Помилка при відправці замовлення');
-    console.error(err);
-  });
-}
+    .then(res => {
+      if (!res.ok) throw new Error('Server error');
+      return res.json();
+    })
+    .then(data => {
+      alert('Замовлення відправлено!');
+      Object.keys(cart).forEach(k => delete cart[k]);
+      updateCartDisplay();
+      document.getElementById('user-name').value = '';
+      document.getElementById('user-phone').value = '';
+      document.getElementById('user-address').value = '';
+      updateMenuButtons();
+      closeCart();
+    })
+    .catch(err => {
+      alert('Помилка при відправці замовлення');
+      console.error(err);
+    });
+  }
 
   window.onscroll = function() {
     document.getElementById('scrollTopBtn').style.display =
