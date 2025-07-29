@@ -288,14 +288,14 @@
     if (cart[name]) {
       cart[name].count++;
     } else {
-      cart[name] = {price: price, count: 1};
+      cart[name] = { price: price, count: 1 };
     }
     updateCartDisplay();
     updateButton(btn, cart[name].count);
   }
 
   function updateButton(btn, count) {
-    btn.textContent = Додано (${count});
+    btn.textContent = `Додано (${count})`;
     btn.disabled = false;
   }
 
@@ -308,8 +308,9 @@
     for (const [name, data] of Object.entries(cart)) {
       total += data.price * data.count;
       totalCount += data.count;
+
       const li = document.createElement('li');
-      li.textContent = ${name} — ${data.price} грн × ${data.count};
+      li.textContent = `${name} — ${data.price} грн × ${data.count}`;
 
       const minusBtn = document.createElement('button');
       minusBtn.textContent = '−';
@@ -339,7 +340,7 @@
     document.getElementById('cart-total').textContent = total;
     document.getElementById('cart-count').textContent = totalCount;
 
-    if(Object.keys(cart).length === 0) {
+    if (Object.keys(cart).length === 0) {
       closeCart();
     }
   }
@@ -348,8 +349,8 @@
     document.querySelectorAll('.dish').forEach(dish => {
       const name = dish.querySelector('h3').textContent;
       const btn = dish.querySelector('button');
-      if(cart[name]) {
-        btn.textContent = Додано (${cart[name].count});
+      if (cart[name]) {
+        btn.textContent = `Додано (${cart[name].count})`;
       } else {
         btn.textContent = 'Додати до кошика';
       }
@@ -385,7 +386,7 @@
 
     fetch('https://fishy-a89x.onrender.com/order', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         name,
         phone,
@@ -393,30 +394,31 @@
         cart
       })
     })
-    .then(res => {
-      if (!res.ok) throw new Error('Server error');
-      return res.json();
-    })
-    .then(data => {
-      alert('Замовлення відправлено!');
-      Object.keys(cart).forEach(k => delete cart[k]);
-      updateCartDisplay();
-      document.getElementById('user-name').value = '';
-      document.getElementById('user-phone').value = '';
-      document.getElementById('user-address').value = '';
-      updateMenuButtons();
-      closeCart();
-    })
-    .catch(err => {
-      alert('Помилка при відправці замовлення');
-      console.error(err);
-    });
+      .then(res => {
+        if (!res.ok) throw new Error('Server error');
+        return res.json();
+      })
+      .then(data => {
+        alert('Замовлення відправлено!');
+        Object.keys(cart).forEach(k => delete cart[k]);
+        updateCartDisplay();
+        document.getElementById('user-name').value = '';
+        document.getElementById('user-phone').value = '';
+        document.getElementById('user-address').value = '';
+        updateMenuButtons();
+        closeCart();
+      })
+      .catch(err => {
+        alert('Помилка при відправці замовлення');
+        console.error(err);
+      });
   }
 
-  window.onscroll = function() {
+  window.onscroll = function () {
     document.getElementById('scrollTopBtn').style.display =
       document.body.scrollTop > 300 || document.documentElement.scrollTop > 300
-        ? 'block' : 'none';
+        ? 'block'
+        : 'none';
   };
 
   function scrollToTop() {
