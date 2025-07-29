@@ -51,7 +51,7 @@ app.post('/send', async (req, res) => {
 
 // --- /order (автоформат) ---
 app.post('/order', async (req, res) => {
-  const { name, phone, address, cart } = req.body;
+  const { name, phone, address, cart, paymentStatus } = req.body;
 
   if (!name || !phone || !cart || Object.keys(cart).length === 0) {
     return res.status(400).json({ error: 'Missing required fields' });
@@ -61,14 +61,28 @@ app.post('/order', async (req, res) => {
   const orderNumber = getNextOrderNumber();
   console.log('Новый заказ №', orderNumber); // для отладки
 
+  // Формируем статус оплаты с иконкой
+  let paymentText = '';
+  if (paymentStatus) {
+    if (paymentStatus.toLowerCase() === 'оплачено') {
+      paymentText = '✅ Оплачено';
+    } else if (paymentStatus.toLowerCase() === 'не оплачено' || paymentStatus.toLowerCase() === 'неоплачено') {
+      paymentText = '❌ Не оплачено';
+    } else {
+      paymentText = `ℹ️ Статус оплати: ${paymentStatus}`;
+    }
+  } else {
+    paymentText = 'ℹ️ Статус оплати: не вказаний';
+  }
+
   let message = `🛒 *Нове замовлення №${orderNumber}*\n\n👤 Імʼя: ${name}\n📞 Телефон: ${phone}`;
   if (address) {
     message += `\n🏠 Доставка: ${address}`;
   } else {
     message += `\n🚶 Самовивіз`;
   }
-
-  message += `\n\n📦 Замовлено:\n`;
+  message += `\n\n💳 Статус оплати: ${paymentText}\n\n📦 Замовлено:\n`;
+  
   Object.entries(cart).forEach(([item, data]) => {
     message += `• ${item} — ${data.count} × ${data.price} грн\n`;
   });
@@ -84,8 +98,4 @@ app.post('/order', async (req, res) => {
     console.error('Telegram API error:', error.message);
     res.status(500).json({ error: 'Failed to send order' });
   }
-});
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
 });
