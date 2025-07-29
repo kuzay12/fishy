@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Fishy Food</title>
   <style>
-    /* Твой CSS без изменений */
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -158,7 +157,7 @@
 <header>
   <img src="logo.png" alt="Logo" />
   <h1>Fishy Food</h1>
-  <button onclick="toggleCart()">🛒</button>
+  <button onclick="toggleCart()">🛒 <span id="cart-count"></span></button>
 </header>
 
 <nav>
@@ -256,7 +255,7 @@
     <p>📍 ЖК Рибінський, Проспект Науки 112Б</p>
     <p>📞 <a href="tel:+380963318856" style="color: white;">+380963318856</a></p>
     <p>Проєкт від <a href="https://www.instagram.com/seafood.dnipro" target="_blank" style="color: white;">@seafood.dnipro</a></p>
-    
+
     <div style="margin: 20px 0;">
       <iframe
         src="https://www.google.com/maps?q=Проспект+Науки+112Б,+Дніпро&output=embed"
@@ -274,7 +273,6 @@
     <p style="margin-top: 10px;">© 2024 Fishy Food</p>
   </div>
 </footer>
-
 
 <button id="scrollTopBtn" title="Вверх" onclick="scrollToTop()">↑</button>
 
@@ -300,9 +298,11 @@
     const cartItemsEl = document.getElementById('cart-items');
     cartItemsEl.innerHTML = '';
     let total = 0;
+    let totalCount = 0;
 
     for (const [name, data] of Object.entries(cart)) {
       total += data.price * data.count;
+      totalCount += data.count;
       const li = document.createElement('li');
       li.textContent = `${name} — ${data.price} грн × ${data.count}`;
 
@@ -316,7 +316,6 @@
         }
         updateCartDisplay();
         updateMenuButtons();
-        updateCartButtonCount();
       };
 
       const plusBtn = document.createElement('button');
@@ -325,7 +324,6 @@
         cart[name].count++;
         updateCartDisplay();
         updateMenuButtons();
-        updateCartButtonCount();
       };
 
       li.appendChild(minusBtn);
@@ -334,23 +332,12 @@
     }
 
     document.getElementById('cart-total').textContent = total;
+    document.getElementById('cart-count').textContent = totalCount > 0 ? `(${totalCount})` : '';
 
-    // Не открываем корзину автоматически, просто скрываем если пусто
+    // Не открываем автоматически, убираем showCart() вызов
+
     if(Object.keys(cart).length === 0) {
       closeCart();
-    }
-
-    updateCartButtonCount();
-  }
-
-  function updateCartButtonCount() {
-    const cartBtn = document.querySelector('header button[onclick="toggleCart()"]');
-    const totalCount = Object.values(cart).reduce((sum, item) => sum + item.count, 0);
-
-    if (totalCount > 0) {
-      cartBtn.textContent = `🛒 (${totalCount})`;
-    } else {
-      cartBtn.textContent = '🛒';
     }
   }
 
@@ -369,10 +356,6 @@
   function toggleCart() {
     const cartPanel = document.getElementById('cart-panel');
     cartPanel.style.display = cartPanel.style.display === 'block' ? 'none' : 'block';
-  }
-
-  function showCart() {
-    document.getElementById('cart-panel').style.display = 'block';
   }
 
   function closeCart() {
@@ -437,8 +420,19 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // Обновляем счетчик при загрузке страницы
-  updateCartButtonCount();
+  // Плавный скролл к разделам по клику в навигации
+  document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault(); // отменяем стандартный прыжок
+
+      const targetId = this.getAttribute('href').substring(1);
+      const targetElement = document.getElementById(targetId);
+
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
 </script>
 </body>
 </html>
