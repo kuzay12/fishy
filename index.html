@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Fishy Food</title>
   <style>
+    /* Твой CSS без изменений */
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -315,6 +316,7 @@
         }
         updateCartDisplay();
         updateMenuButtons();
+        updateCartButtonCount();
       };
 
       const plusBtn = document.createElement('button');
@@ -323,6 +325,7 @@
         cart[name].count++;
         updateCartDisplay();
         updateMenuButtons();
+        updateCartButtonCount();
       };
 
       li.appendChild(minusBtn);
@@ -332,10 +335,22 @@
 
     document.getElementById('cart-total').textContent = total;
 
-    if(Object.keys(cart).length > 0) {
-      showCart();
-    } else {
+    // Не открываем корзину автоматически, просто скрываем если пусто
+    if(Object.keys(cart).length === 0) {
       closeCart();
+    }
+
+    updateCartButtonCount();
+  }
+
+  function updateCartButtonCount() {
+    const cartBtn = document.querySelector('header button[onclick="toggleCart()"]');
+    const totalCount = Object.values(cart).reduce((sum, item) => sum + item.count, 0);
+
+    if (totalCount > 0) {
+      cartBtn.textContent = `🛒 (${totalCount})`;
+    } else {
+      cartBtn.textContent = '🛒';
     }
   }
 
@@ -421,6 +436,9 @@
   function scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+
+  // Обновляем счетчик при загрузке страницы
+  updateCartButtonCount();
 </script>
 </body>
 </html>
