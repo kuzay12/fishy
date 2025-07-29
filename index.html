@@ -6,7 +6,7 @@
   <title>Fishy Food</title>
   <style>
     html {
-      scroll-behavior: smooth; /* Плавный скролл для всех якорных ссылок */
+      scroll-behavior: smooth; /* Плавный скролл */
     }
     body {
       font-family: Arial, sans-serif;
@@ -116,13 +116,6 @@
       border-radius: 4px;
       box-sizing: border-box;
     }
-    .map-container {
-      width: 100%;
-      height: 300px;
-      margin-top: 20px;
-      border-radius: 10px;
-      overflow: hidden;
-    }
     #scrollTopBtn {
       display: none;
       position: fixed;
@@ -168,11 +161,15 @@
   <a href="#breakfasts">Сніданки</a>
   <a href="#salads">Салати</a>
   <a href="#icecream">Морозиво</a>
+  <a href="#chef">Страви від Шефа</a>
+  <a href="#drinks">Холодні напої</a>
+  <a href="#coffee">Кава</a>
+  <a href="#desserts">Десерти</a>
 </nav>
 
+<!-- Сніданки -->
 <h2 class="section-title" id="breakfasts">Сніданки</h2>
 <main class="menu">
-  <!-- Блюда здесь -->
   <div class="dish">
     <img src="Сендвіч з лососем.png" alt="Сендвіч з лососем" />
     <h3>Сендвіч з лососем</h3>
@@ -185,20 +182,9 @@
     <p>185 грн</p>
     <button onclick="addToCart('Сендвіч лосось авокадо', 185, this)">Додати до кошика</button>
   </div>
-  <div class="dish">
-    <img src="Омлет з креветкою.png" alt="Омлет з креветкою" />
-    <h3>Омлет з креветкою</h3>
-    <p>175 грн</p>
-    <button onclick="addToCart('Омлет з креветкою', 175, this)">Додати до кошика</button>
-  </div>
-  <div class="dish">
-    <img src="Вівсянка з креветкою та страчетелою.png" alt="Вівсянка з креветкою та страчетелою" />
-    <h3>Вівсянка з креветкою та страчетелою</h3>
-    <p>295 грн</p>
-    <button onclick="addToCart('Вівсянка з креветкою та страчетелою', 295, this)">Додати до кошика</button>
-  </div>
 </main>
 
+<!-- Салати -->
 <h2 class="section-title" id="salads">Салати</h2>
 <main class="menu">
   <div class="dish">
@@ -209,6 +195,7 @@
   </div>
 </main>
 
+<!-- Морозиво -->
 <h2 class="section-title" id="icecream">Морозиво</h2>
 <main class="menu">
   <div class="dish">
@@ -217,20 +204,65 @@
     <p>140 грн</p>
     <button onclick="addToCart('Полуниця вершки', 140, this)">Додати до кошика</button>
   </div>
+</main>
+
+<!-- Страви від Шефа -->
+<h2 class="section-title" id="chef">Страви від Шефа</h2>
+<main class="menu">
   <div class="dish">
-    <img src="Солона карамель.png" alt="Солона карамель" />
-    <h3>Солона карамель</h3>
-    <p>140 грн</p>
-    <button onclick="addToCart('Солона карамель', 140, this)">Додати до кошика</button>
-  </div>
-  <div class="dish">
-    <img src="Маракуйя-манго.png" alt="Маракуйя-манго" />
-    <h3>Маракуйя-манго</h3>
-    <p>155 грн</p>
-    <button onclick="addToCart('Маракуйя-манго', 155, this)">Додати до кошика</button>
+    <img src="Стейк з тунця.png" alt="Стейк з тунця" />
+    <h3>Стейк з тунця</h3>
+    <p>450 грн</p>
+    <button onclick="addToCart('Стейк з тунця', 450, this)">Додати до кошика</button>
   </div>
 </main>
 
+<!-- Холодні напої -->
+<h2 class="section-title" id="drinks">Холодні напої</h2>
+<main class="menu">
+  <div class="dish">
+    <img src="Лимонад цитрусовий.png" alt="Лимонад цитрусовий" />
+    <h3>Лимонад цитрусовий</h3>
+    <p>95 грн</p>
+    <button onclick="addToCart('Лимонад цитрусовий', 95, this)">Додати до кошика</button>
+  </div>
+</main>
+
+<!-- Кава -->
+<h2 class="section-title" id="coffee">Кава</h2>
+<main class="menu">
+  <div class="dish">
+    <img src="Еспресо.png" alt="Еспресо" />
+    <h3>Еспресо</h3>
+    <p>60 грн</p>
+    <button onclick="addToCart('Еспресо', 60, this)">Додати до кошика</button>
+  </div>
+  <div class="dish">
+    <img src="Лате.png" alt="Лате" />
+    <h3>Лате</h3>
+    <p>75 грн</p>
+    <button onclick="addToCart('Лате', 75, this)">Додати до кошика</button>
+  </div>
+</main>
+
+<!-- Десерти -->
+<h2 class="section-title" id="desserts">Десерти</h2>
+<main class="menu">
+  <div class="dish">
+    <img src="Чізкейк.png" alt="Чізкейк" />
+    <h3>Чізкейк</h3>
+    <p>145 грн</p>
+    <button onclick="addToCart('Чізкейк', 145, this)">Додати до кошика</button>
+  </div>
+  <div class="dish">
+    <img src="Тірамісу.png" alt="Тірамісу" />
+    <h3>Тірамісу</h3>
+    <p>160 грн</p>
+    <button onclick="addToCart('Тірамісу', 160, this)">Додати до кошика</button>
+  </div>
+</main>
+
+<!-- Кошик -->
 <div id="cart-panel">
   <h3>🛒 Кошик</h3>
   <ul id="cart-items"></ul>
@@ -424,17 +456,7 @@
   function scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-
-  // Дополнительный плавный скролл на навигацию (если нужно)
-  document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-      e.preventDefault();
-      const target = document.querySelector(this.getAttribute('href'));
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth' });
-      }
-    });
-  });
 </script>
+
 </body>
 </html>
