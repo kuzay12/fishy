@@ -1,26 +1,44 @@
 require('dotenv').config();
-const express = require('express');
-const axios = require('axios');
-const app = express();
-const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+// server.js
 const express = require('express');
 const cors = require('cors');
-const app = express();
+const axios = require('axios');
+require('dotenv').config();
 
-app.use(cors()); // <-- Разрешает запросы с любого домена
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(cors()); // Разрешаем запросы с любого источника (можно настроить домен)
 app.use(express.json());
 
-app.post('/order', (req, res) => {
-  const { text } = req.body;
-  // логика отправки в телегу...
+app.post('/send', async (req, res) => {
+  const { message } = req.body;
+  if (!message) {
+    return res.status(400).json({ error: 'No message provided' });
+  }
 
-  res.json({ status: 'ok' });
+  const telegramToken = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+
+  if (!telegramToken || !chatId) {
+    return res.status(500).json({ error: 'Bot token or chat ID not set' });
+  }
+
+  try {
+    await axios.post(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
+      chat_id: chatId,
+      text: message,
+      parse_mode: 'Markdown',
+    });
+    res.json({ status: 'Message sent' });
+  } catch (error) {
+    console.error('Telegram API error:', error.message);
+    res.status(500).json({ error: 'Failed to send message' });
+  }
 });
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log('Server started');
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
 
 app.use(express.json());
