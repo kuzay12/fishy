@@ -339,7 +339,6 @@
     }
   }
 
-  // Обновляем кнопки меню, чтобы они показывали текущее количество
   function updateMenuButtons() {
     document.querySelectorAll('.dish').forEach(dish => {
       const name = dish.querySelector('h3').textContent;
@@ -354,13 +353,7 @@
 
   function toggleCart() {
     const cartPanel = document.getElementById('cart-panel');
-    if(cartPanel.style.display === 'block') {
-      cartPanel.style.display = 'none';
-    } else {
-      if(Object.keys(cart).length > 0) {
-        cartPanel.style.display = 'block';
-      }
-    }
+    cartPanel.style.display = cartPanel.style.display === 'block' ? 'none' : 'block';
   }
 
   function showCart() {
@@ -373,78 +366,58 @@
 
   function toggleAddress(show) {
     const addressInput = document.getElementById('user-address');
-    if (show) {
-      addressInput.style.display = 'block';
-      addressInput.required = true;
-    } else {
-      addressInput.style.display = 'none';
-      addressInput.required = false;
-      addressInput.value = '';
-    }
+    addressInput.style.display = show ? 'block' : 'none';
+    addressInput.required = show;
+    if (!show) addressInput.value = '';
   }
 
- function submitOrder() {
-  const name = document.getElementById('user-name').value.trim();
-  const phone = document.getElementById('user-phone').value.trim();
-  const deliveryType = document.querySelector('input[name="delivery-type"]:checked').value;
-  const address = document.getElementById('user-address').value.trim();
+  function submitOrder() {
+    const name = document.getElementById('user-name').value.trim();
+    const phone = document.getElementById('user-phone').value.trim();
+    const deliveryType = document.querySelector('input[name="delivery-type"]:checked').value;
+    const address = document.getElementById('user-address').value.trim();
 
-  if (!name) {
-    alert('Введіть ваше імʼя');
-    return;
-  }
-  if (!phone) {
-    alert('Введіть телефон');
-    return;
-  }
-  if (deliveryType === 'delivery' && !address) {
-    alert('Введіть адресу доставки');
-    return;
-  }
-  if(Object.keys(cart).length === 0) {
-    alert('Кошик порожній');
-    return;
+    if (!name) return alert('Введіть ваше імʼя');
+    if (!phone) return alert('Введіть телефон');
+    if (deliveryType === 'delivery' && !address) return alert('Введіть адресу доставки');
+    if (Object.keys(cart).length === 0) return alert('Кошик порожній');
+
+    fetch('https://fishy-a89x.onrender.com/order', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        name,
+        phone,
+        address: deliveryType === 'delivery' ? address : '',
+        cart
+      })
+    })
+    .then(res => {
+      if (!res.ok) throw new Error('Server error');
+      return res.json();
+    })
+    .then(data => {
+      alert('Замовлення відправлено!');
+      Object.keys(cart).forEach(k => delete cart[k]);
+      updateCartDisplay();
+      document.getElementById('user-name').value = '';
+      document.getElementById('user-phone').value = '';
+      document.getElementById('user-address').value = '';
+      updateMenuButtons();
+      closeCart();
+    })
+    .catch(err => {
+      alert('Помилка при відправці замовлення');
+      console.error(err);
+    });
   }
 
-  const orderData = {
-    name: name,
-    phone: phone,
-    deliveryType: deliveryType,
-    address: deliveryType === 'delivery' ? address : '',
-    cart: cart
-  };
-
-  fetch('https://fishy-a89x.onrender.com/order', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({
-    name: name,          // имя клиента
-    phone: phone,        // номер телефона
-    address: address,    // адрес или пусто для самовывоза
-    cart: cart           // объект с товарами, вида: { "Лосось": { count: 2, price: 190 } }
-  }),
-})
-.then(res => res.json())
-.then(data => {
-  alert('Замовлення відправлено!');
-  // Очистка корзини, формы и т.п.
-})
-.catch(err => {
-  alert('Помилка при відправці замовлення');
-  console.error(err);
-});
-
-  // Кнопка скролла вверх
-  const scrollTopBtn = document.getElementById('scrollTopBtn');
   window.onscroll = function() {
-    if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-      scrollTopBtn.style.display = 'block';
-    } else {
-      scrollTopBtn.style.display = 'none';
-    }
+    document.getElementById('scrollTopBtn').style.display =
+      document.body.scrollTop > 300 || document.documentElement.scrollTop > 300
+        ? 'block' : 'none';
   };
+
   function scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
