@@ -2,6 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -12,7 +14,22 @@ app.use(express.json());
 const telegramToken = process.env.TELEGRAM_BOT_TOKEN;
 const chatId = process.env.TELEGRAM_CHAT_ID;
 
-// /send (ручной текст)
+// --- Счётчик заказов ---
+const counterFile = path.join(__dirname, 'orderCounter.json');
+
+function getNextOrderNumber() {
+  let data;
+  try {
+    data = JSON.parse(fs.readFileSync(counterFile, 'utf-8'));
+  } catch {
+    data = { lastOrder: 0 };
+  }
+  data.lastOrder += 1;
+  fs.writeFileSync(counterFile, JSON.stringify(data));
+  return data.lastOrder;
+}
+
+// --- /send (ручной текст) ---
 app.post('/send', async (req, res) => {
   const { message } = req.body;
   if (!message) {
@@ -32,7 +49,7 @@ app.post('/send', async (req, res) => {
   }
 });
 
-// /order (автоформат)
+// --- /order (автоформат) ---
 app.post('/order', async (req, res) => {
   const { name, phone, address, cart } = req.body;
 
@@ -40,7 +57,10 @@ app.post('/order', async (req, res) => {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
-  let message = `🛒 *Нове замовлення*\n\n👤 Імʼя: ${name}\n📞 Телефон: ${phone}`;
+  // получаем уникальный номер заказа
+  const orderNumber = getNextOrderNumber();
+
+  let message = `🛒 *Нове замовлення №${orderNumber}*\n\n👤 Імʼя: ${name}\n📞 Телефон: ${phone}`;
   if (address) {
     message += `\n🏠 Доставка: ${address}`;
   } else {
@@ -58,7 +78,7 @@ app.post('/order', async (req, res) => {
       text: message,
       parse_mode: 'Markdown',
     });
-    res.json({ status: 'Order sent' });
+    res.json({ status: 'Order sent', orderNumber });
   } catch (error) {
     console.error('Telegram API error:', error.message);
     res.status(500).json({ error: 'Failed to send order' });
