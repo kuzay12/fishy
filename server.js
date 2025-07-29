@@ -3,6 +3,25 @@ const express = require('express');
 const axios = require('axios');
 const app = express();
 const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+const express = require('express');
+const cors = require('cors');
+const app = express();
+
+app.use(cors()); // <-- Разрешает запросы с любого домена
+app.use(express.json());
+
+app.post('/order', (req, res) => {
+  const { text } = req.body;
+  // логика отправки в телегу...
+
+  res.json({ status: 'ok' });
+});
+
+app.listen(process.env.PORT || 3000, () => {
+  console.log('Server started');
+});
 
 app.use(express.json());
 
@@ -26,38 +45,4 @@ app.post('/order', async (req, res) => {
   Object.entries(cart).forEach(([item, data]) => {
     message += `• ${item} — ${data.count} × ${data.price} грн\n`;
   });
-
-  try {
-    await axios.post(`https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`, {
-      chat_id: process.env.CHAT_ID,
-      text: message,
-      parse_mode: 'Markdown',
-    });
-
-    res.send({ success: true });
-  } catch (error) {
-    console.error('Telegram error:', error.message);
-    res.status(500).send({ error: 'Не вдалося надіслати повідомлення' });
-  }
-});
-
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-const express = require('express');
-const cors = require('cors');
-const app = express();
-
-app.use(cors()); // <-- Разрешает запросы с любого домена
-app.use(express.json());
-
-app.post('/order', (req, res) => {
-  const { text } = req.body;
-  // логика отправки в телегу...
-
-  res.json({ status: 'ok' });
-});
-
-app.listen(process.env.PORT || 3000, () => {
-  console.log('Server started');
-});
 });
