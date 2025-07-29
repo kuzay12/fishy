@@ -1,5 +1,6 @@
-npm install cors
+
 {
+  npm install cors
   "name": "telegram-order-bot",
   "version": "1.0.0",
   "main": "server.js",
