@@ -59,6 +59,7 @@ app.post('/order', async (req, res) => {
 
   // получаем уникальный номер заказа
   const orderNumber = getNextOrderNumber();
+  console.log('Новый заказ №', orderNumber); // для отладки
 
   let message = `🛒 *Нове замовлення №${orderNumber}*\n\n👤 Імʼя: ${name}\n📞 Телефон: ${phone}`;
   if (address) {
