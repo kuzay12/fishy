@@ -61,20 +61,7 @@ app.post('/order', async (req, res) => {
   const orderNumber = getNextOrderNumber();
   console.log('Новый заказ №', orderNumber); // для отладки
 
-  // Формируем статус оплаты с иконкой
-  let paymentText = '';
-  if (paymentStatus) {
-    if (paymentStatus.toLowerCase() === 'оплачено') {
-      paymentText = '✅ Оплачено';
-    } else if (paymentStatus.toLowerCase() === 'не оплачено' || paymentStatus.toLowerCase() === 'неоплачено') {
-      paymentText = '❌ Не оплачено';
-    } else {
-      paymentText = `ℹ️ Статус оплати: ${paymentStatus}`;
-    }
-  } else {
-    paymentText = 'ℹ️ Статус оплати: не вказаний';
-  }
-
+  
   let message = `🛒 *Нове замовлення №${orderNumber}*\n\n👤 Імʼя: ${name}\n📞 Телефон: ${phone}`;
   if (address) {
     message += `\n🏠 Доставка: ${address}`;
