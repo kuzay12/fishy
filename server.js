@@ -37,7 +37,7 @@ app.post('/send', async (req, res) => {
   }
 
   try {
-    await axios.post('https://api.telegram.org/bot${telegramToken}/sendMessage', {
+    await axios.post(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
       chat_id: chatId,
       text: message,
       parse_mode: 'Markdown',
@@ -61,20 +61,20 @@ app.post('/order', async (req, res) => {
   const orderNumber = getNextOrderNumber();
   console.log('Новый заказ №', orderNumber); // для отладки
 
-  let message = 🛒 *Нове замовлення №${orderNumber}*\n\n👤 Імʼя: ${name}\n📞 Телефон: ${phone};
+  let message = `🛒 *Нове замовлення №${orderNumber}*\n\n👤 Імʼя: ${name}\n📞 Телефон: ${phone}`;
   if (address) {
-    message += \n🏠 Доставка: ${address};
+    message += `\n🏠 Доставка: ${address}`;
   } else {
-    message += \n🚶 Самовивіз;
+    message += `\n🚶 Самовивіз`;
   }
 
-  message += \n\n📦 Замовлено:\n;
+  message += `\n\n📦 Замовлено:\n`;
   Object.entries(cart).forEach(([item, data]) => {
-    message += • ${item} — ${data.count} × ${data.price} грн\n;
+    message += `• ${item} — ${data.count} × ${data.price} грн\n`;
   });
 
   try {
-    await axios.post('https://api.telegram.org/bot${telegramToken}/sendMessage', {
+    await axios.post(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
       chat_id: chatId,
       text: message,
       parse_mode: 'Markdown',
@@ -85,6 +85,7 @@ app.post('/order', async (req, res) => {
     res.status(500).json({ error: 'Failed to send order' });
   }
 });
+
 app.listen(PORT, () => {
-  console.log(Server running on port ${PORT});
+  console.log(`Server running on port ${PORT}`);
 });
