@@ -414,32 +414,22 @@
     cart: cart
   };
 
-  fetch('https://fishy-a89x.onrender.com', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(orderData)
-  })
-  .then(response => {
-    if(response.ok) {
-      alert('Замовлення відправлено!');
-      // Очистка корзины и формы
-      for (const key in cart) {
-        delete cart[key];
-      }
-      updateCartDisplay();
-      updateMenuButtons();
-      document.getElementById('user-name').value = '';
-      document.getElementById('user-phone').value = '';
-      document.getElementById('user-address').value = '';
-      toggleAddress(false);
-      closeCart();
-    } else {
-      alert('Сталася помилка при відправці замовлення.');
-    }
-  })
-  .catch(() => {
-    alert('Не вдалося зв’язатися з сервером.');
-  });
+  fetch('https://fishy-a89x.onrender.com/order', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({ text: message }),
+})
+.then(res => res.json())
+.then(data => {
+  alert('Замовлення відправлено!');
+  // очищаем корзину и т.п.
+})
+.catch(err => {
+  alert('Помилка при відправці замовлення');
+  console.error(err);
+});
 }
   // Кнопка скролла вверх
   const scrollTopBtn = document.getElementById('scrollTopBtn');
